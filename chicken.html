@@ -39,9 +39,12 @@ button {
   transition: transform 3s linear;
 }
 
+/* Gold chicken */
 .gold {
-  filter: drop-shadow(0 0 8px gold);
-  animation: glow 1.5s infinite alternate;
+  filter: drop-shadow(0 0 12px gold);
+  animation: glow 1.2s infinite alternate;
+  font-size: 50px;
+  cursor: pointer;
 }
 
 @keyframes glow {
@@ -49,6 +52,19 @@ button {
   to { filter: drop-shadow(0 0 18px gold); }
 }
 
+/* Rainbow chicken */
+.rainbow {
+  font-size: 55px;
+  cursor: pointer;
+  animation: rainbowGlow 1s linear infinite;
+}
+
+@keyframes rainbowGlow {
+  0% { filter: hue-rotate(0deg) drop-shadow(0 0 10px white); }
+  100% { filter: hue-rotate(360deg) drop-shadow(0 0 20px white); }
+}
+
+/* Egg explosion intro */
 .explosion-egg {
   position: fixed;
   left: 50%;
@@ -71,15 +87,18 @@ button {
 
 <script>
 const MAX_CHICKENS = 80;
-let chickens = [];
 
+let chickens = [];
+let goldExists = false;
+let rainbowExists = false;
+
+/* Egg intro explosion */
 function eggExplosion() {
   let egg = document.createElement("div");
   egg.className = "explosion-egg";
   egg.innerHTML = "🥚";
   document.body.appendChild(egg);
 
-  // Crack animation
   egg.animate([
     { transform: "translate(-50%,-50%) scale(1)" },
     { transform: "translate(-50%,-50%) scale(1.4)" },
@@ -89,62 +108,137 @@ function eggExplosion() {
   setTimeout(() => {
     egg.remove();
 
-    // Spawn initial chicken burst
     for (let i = 0; i < 15; i++) {
-      spawnChicken(true);
+      spawnChicken();
     }
 
     spawnLoop();
   }, 600);
 }
 
-function spawnChicken(burst = false) {
+/* Spawn chicken from egg */
+function spawnChicken() {
 
   if (chickens.length >= MAX_CHICKENS) {
     chickens.shift().remove();
   }
 
-  let c = document.createElement("div");
-  c.className = "chicken";
-
-  // Rare golden chicken (3% chance)
-  if (Math.random() < 0.03) {
-    c.innerHTML = "🐔";
-    c.classList.add("gold");
-  } else {
-    c.innerHTML = "🐔";
-  }
+  let egg = document.createElement("div");
+  egg.className = "chicken";
+  egg.innerHTML = "🥚";
 
   let x = Math.random() * 100;
   let y = 20 + Math.random() * 75;
 
-  c.style.left = x + "vw";
-  c.style.top = y + "vh";
+  egg.style.left = x + "vw";
+  egg.style.top = y + "vh";
 
-  document.body.appendChild(c);
-  chickens.push(c);
+  document.body.appendChild(egg);
 
-  wander(c);
+  setTimeout(() => {
+
+    let rarity = "normal";
+
+    // Rainbow (ultra rare)
+    if (!rainbowExists && Math.random() < 0.0005) {
+      rarity = "rainbow";
+      rainbowExists = true;
+    }
+    // Gold
+    else if (!goldExists && Math.random() < 0.005) {
+      rarity = "gold";
+      goldExists = true;
+    }
+
+    egg.innerHTML = "🐔";
+
+    if (rarity === "gold") {
+      egg.classList.add("gold");
+      egg.onclick = () => eliteChickenClick(egg, "gold");
+    }
+
+    if (rarity === "rainbow") {
+      egg.classList.add("rainbow");
+      egg.onclick = () => eliteChickenClick(egg, "rainbow");
+    }
+
+    chickens.push(egg);
+    wander(egg);
+
+  }, 400);
 }
 
+/* Wandering movement */
 function wander(c) {
   setInterval(() => {
     let x = Math.random() * 100;
     let y = 20 + Math.random() * 75;
+
     c.style.transform =
       `translate(${x - 50}vw, ${y - 50}vh)`;
+
   }, 3000);
 }
 
+/* Spawn loop */
 function spawnLoop() {
-  setInterval(() => {
-    spawnChicken();
-  }, 600);
+  setInterval(spawnChicken, 600);
 }
 
+/* Elite chicken click */
+function eliteChickenClick(chicken, type) {
+
+  sparkleBurst(chicken);
+
+  if (type === "rainbow") {
+    alert("🌈 LEGENDARY SECRET EGG FOUND! You are beyond elite!");
+    rainbowExists = false;
+  } else {
+    alert("🥚 Secret Egg Found! You are elite!");
+    goldExists = false;
+  }
+
+  setTimeout(() => chicken.remove(), 200);
+}
+
+/* Sparkle burst */
+function sparkleBurst(origin) {
+
+  let rect = origin.getBoundingClientRect();
+  let cx = rect.left + rect.width / 2;
+  let cy = rect.top + rect.height / 2;
+
+  for (let i = 0; i < 20; i++) {
+
+    let s = document.createElement("div");
+    s.style.position = "fixed";
+    s.style.left = cx + "px";
+    s.style.top = cy + "px";
+    s.style.width = "6px";
+    s.style.height = "6px";
+    s.style.background = "gold";
+    s.style.borderRadius = "50%";
+    s.style.zIndex = "9999";
+
+    let angle = Math.random() * Math.PI * 2;
+    let dist = 80 + Math.random() * 40;
+
+    s.animate([
+      { transform: "translate(0,0)", opacity: 1 },
+      {
+        transform: `translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`,
+        opacity: 0
+      }
+    ], { duration: 600 });
+
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 600);
+  }
+}
+
+/* Start */
 eggExplosion();
 </script>
 
 </body>
 </html>
-
