@@ -146,14 +146,19 @@ function showVictoryScreen() {
 function tapVictory() {
   var card = document.getElementById("victoryCard");
 
-  card.style.boxShadow = "0 0 50px white";
-  card.style.transform = "scale(1.03)";
+  // Flash effect
+  card.style.background = "#ffffff";
+  card.style.transform = "scale(1.08)";
+  card.style.boxShadow = "0 0 80px white";
 
   setTimeout(function() {
-    card.style.boxShadow = "0 0 25px gold";
+    card.style.background =
+      "linear-gradient(135deg,#fff8dc,#ffd700)";
     card.style.transform = "scale(1)";
-  }, 200);
+    card.style.boxShadow = "0 0 25px gold";
+  }, 250);
 }
+
 
 function launchConfetti() {
   for (var i = 0; i < 100; i++) {
@@ -217,4 +222,5 @@ function secretEgg() {
 
 </body>
 </html>
+
 
