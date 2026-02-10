@@ -146,18 +146,88 @@ function showVictoryScreen() {
 function tapVictory() {
   var card = document.getElementById("victoryCard");
 
-  // Flash effect
-  card.style.background = "#ffffff";
-  card.style.transform = "scale(1.08)";
-  card.style.boxShadow = "0 0 80px white";
+  // Create egg explosion overlay
+  var burst = document.createElement("div");
+  burst.style.position = "fixed";
+  burst.style.left = "50%";
+  burst.style.top = "50%";
+  burst.style.transform = "translate(-50%, -50%)";
+  burst.style.fontSize = "120px";
+  burst.style.zIndex = "9999";
+  burst.innerHTML = "🥚";
 
+  document.body.appendChild(burst);
+
+  // Shake egg
+  burst.animate([
+    { transform: "translate(-50%, -50%) rotate(0deg)" },
+    { transform: "translate(-48%, -52%) rotate(-10deg)" },
+    { transform: "translate(-52%, -48%) rotate(10deg)" },
+    { transform: "translate(-50%, -50%) rotate(0deg)" }
+  ], {
+    duration: 300,
+    iterations: 2
+  });
+
+  // Crack → chicken
   setTimeout(function() {
-    card.style.background =
-      "linear-gradient(135deg,#fff8dc,#ffd700)";
-    card.style.transform = "scale(1)";
-    card.style.boxShadow = "0 0 25px gold";
-  }, 250);
+    burst.innerHTML = "🐣";
+
+    burst.animate([
+      { transform: "translate(-50%, -50%) scale(0.5)" },
+      { transform: "translate(-50%, -70%) scale(1.4)" },
+      { transform: "translate(-50%, -50%) scale(1)" }
+    ], {
+      duration: 500
+    });
+
+    // Spark burst
+    for (var i = 0; i < 20; i++) {
+      var spark = document.createElement("div");
+      spark.style.position = "fixed";
+      spark.style.left = "50%";
+      spark.style.top = "50%";
+      spark.style.width = "6px";
+      spark.style.height = "6px";
+      spark.style.background = "gold";
+      spark.style.borderRadius = "50%";
+      spark.style.zIndex = "9998";
+
+      var angle = Math.random() * Math.PI * 2;
+      var distance = 120 + Math.random() * 80;
+
+      spark.animate([
+        { transform: "translate(-50%, -50%)" },
+        {
+          transform:
+            "translate(" +
+            (Math.cos(angle) * distance) +
+            "px," +
+            (Math.sin(angle) * distance) +
+            "px)"
+        }
+      ], {
+        duration: 600,
+        easing: "ease-out"
+      });
+
+      document.body.appendChild(spark);
+
+      (function(s) {
+        setTimeout(function() {
+          document.body.removeChild(s);
+        }, 600);
+      })(spark);
+    }
+
+  }, 300);
+
+  // Cleanup
+  setTimeout(function() {
+    document.body.removeChild(burst);
+  }, 1200);
 }
+
 
 
 function launchConfetti() {
@@ -222,5 +292,6 @@ function secretEgg() {
 
 </body>
 </html>
+
 
 
