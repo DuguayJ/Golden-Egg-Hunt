@@ -146,10 +146,8 @@ function showVictoryScreen() {
 
 
 function tapVictory() {
-  var centerX = window.innerWidth / 2;
-  var centerY = window.innerHeight / 2;
 
-  // Egg burst element
+  // Create egg/chicken element
   var burst = document.createElement("div");
   burst.style.position = "fixed";
   burst.style.left = "50%";
@@ -161,7 +159,7 @@ function tapVictory() {
 
   document.body.appendChild(burst);
 
-  // Shake egg
+  // Egg shake
   burst.animate([
     { transform: "translate(-50%, -50%) rotate(0deg)" },
     { transform: "translate(-48%, -52%) rotate(-12deg)" },
@@ -178,6 +176,16 @@ function tapVictory() {
       { transform: "translate(-50%, -75%) scale(1.6)" },
       { transform: "translate(-50%, -50%) scale(1)" }
     ], { duration: 500 });
+
+    // Floating chicken idle animation
+    burst.animate([
+      { transform: "translate(-50%, -50%)" },
+      { transform: "translate(-50%, -60%)" },
+      { transform: "translate(-50%, -50%)" }
+    ], {
+      duration: 2000,
+      iterations: Infinity
+    });
 
     // Golden aura ring
     var aura = document.createElement("div");
@@ -201,15 +209,16 @@ function tapVictory() {
       document.body.removeChild(aura);
     }, 800);
 
-    // Pixel explosion
+    // Chunky pixel explosion
     for (var i = 0; i < 40; i++) {
       var pixel = document.createElement("div");
       pixel.style.position = "fixed";
       pixel.style.left = "50%";
       pixel.style.top = "50%";
-      pixel.style.width = "8px";
-      pixel.style.height = "8px";
+      pixel.style.width = "16px";
+      pixel.style.height = "16px";
       pixel.style.background = "#ffd700";
+      pixel.style.boxShadow = "0 0 8px gold";
       pixel.style.zIndex = "9998";
 
       var angle = Math.random() * Math.PI * 2;
@@ -244,16 +253,18 @@ function tapVictory() {
       }, f * 200);
     }
 
-    // Mario-style WIN burst
+    // WIN banner
     var win = document.createElement("div");
     win.innerHTML = "⭐ WIN! ⭐";
     win.style.position = "fixed";
     win.style.left = "50%";
-    win.style.top = "30%";
+    win.style.top = "25%";
     win.style.transform = "translate(-50%, -50%)";
-    win.style.fontSize = "48px";
+    win.style.fontSize = "64px";
     win.style.fontWeight = "bold";
-    win.style.color = "gold";
+    win.style.color = "#ffffff";
+    win.style.textShadow =
+      "0 0 10px black, 0 0 25px gold, 0 0 40px gold";
     win.style.zIndex = "9999";
 
     win.animate([
@@ -266,14 +277,11 @@ function tapVictory() {
 
     setTimeout(function() {
       document.body.removeChild(win);
-    }, 1500);
+    }, 2000);
 
   }, 300);
-
-  setTimeout(function() {
-    document.body.removeChild(burst);
-  }, 1500);
 }
+
 
 function createFirework() {
   var x = Math.random() * window.innerWidth;
@@ -379,6 +387,7 @@ function secretEgg() {
 
 </body>
 </html>
+
 
 
 
