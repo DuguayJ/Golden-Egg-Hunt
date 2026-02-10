@@ -45,7 +45,7 @@ body {
   z-index: 1;
 }
 
-/* Idle egg glow */
+/* Egg animation */
 .egg {
   font-size: 70px;
   cursor: pointer;
@@ -58,15 +58,17 @@ body {
   to { text-shadow: 0 0 25px #ffd700; }
 }
 
-/* Win animation */
-.egg.win {
-  transform: scale(1.6);
-  animation: winGlow 0.8s infinite alternate;
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  top: -10px;
+  animation: fall linear forwards;
 }
 
-@keyframes winGlow {
-  from { text-shadow: 0 0 20px #fff; }
-  to { text-shadow: 0 0 50px gold; }
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(720deg); }
 }
 
 input {
@@ -83,28 +85,6 @@ button {
   border-radius: 12px;
   background: #ffd700;
   cursor: pointer;
-}
-
-#success {
-  display: none;
-  margin-top: 20px;
-  font-size: 22px;
-  color: green;
-}
-
-/* Confetti */
-.confetti {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  top: -10px;
-  animation: fall linear forwards;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(110vh) rotate(720deg);
-  }
 }
 </style>
 
@@ -126,23 +106,44 @@ function checkWords() {
 }
 
 function celebrate() {
-  document.getElementById("success").style.display = "block";
-  document.getElementById("egg").classList.add("win");
+  const egg = document.getElementById("egg");
 
+  // Egg crack animation
+  egg.innerHTML = "💥";
+  egg.style.transform = "scale(1.8)";
+
+  launchConfetti();
+
+  setTimeout(showVictoryScreen, 800);
+}
+
+function showVictoryScreen() {
+  const card = document.querySelector(".card");
+
+  card.innerHTML = `
+    <div class="egg" style="font-size:90px;">🥇</div>
+    <h1>Golden Egg Unlocked!</h1>
+    <p><strong>Congratulations!</strong></p>
+    <p>📸 Screenshot this screen to claim your prize.</p>
+  `;
+}
+
+function launchConfetti() {
   for (let i = 0; i < 100; i++) {
     let c = document.createElement("div");
     c.className = "confetti";
     c.style.left = Math.random() * 100 + "vw";
     c.style.background =
-      ["#ffd700","#ff4081","#4caf50","#2196f3"][Math.floor(Math.random()*4)];
+      ["#ffd700","#ff4081","#4caf50","#2196f3"]
+      [Math.floor(Math.random()*4)];
     c.style.animationDuration = (Math.random()*2+2) + "s";
-    document.body.appendChild(c);
 
+    document.body.appendChild(c);
     setTimeout(() => c.remove(), 4000);
   }
 }
 
-/* Sparkle generator AFTER page loads */
+/* Sparkle generator */
 window.onload = function() {
   for (let i = 0; i < 40; i++) {
     let s = document.createElement("div");
@@ -180,10 +181,6 @@ function secretEgg() {
 <input id="w5" placeholder="Word 5"><br><br>
 
 <button onclick="checkWords()">Unlock</button>
-
-<div id="success">
-🎉 Golden Egg Unlocked! Bring this to IT for your prize!
-</div>
 
 </div>
 
