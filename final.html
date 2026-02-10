@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Golden Egg Unlock</title>
+
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  padding: 40px;
+}
+
+input {
+  margin: 5px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+#success {
+  display: none;
+  margin-top: 30px;
+  font-size: 24px;
+  color: green;
+}
+</style>
+
+<script>
+const correctWords = ["GOLD", "QUEST", "HIDDEN", "KEY", "RISE"];
+
+function checkWords() {
+  let inputs = [];
+
+  for (let i = 1; i <= 5; i++) {
+    let word = document.getElementById("w" + i).value.trim().toUpperCase();
+    inputs.push(word);
+  }
+
+  let matched = correctWords.every(w => inputs.includes(w));
+
+  if (matched) {
+    document.getElementById("success").style.display = "block";
+  } else {
+    alert("Not quite right — keep hunting!");
+  }
+}
+</script>
+
+</head>
+
+<body>
+
+<h1>Unlock the Golden Egg</h1>
+
+<p>Enter your 5 words:</p>
+
+<input id="w1" placeholder="Word 1"><br>
+<input id="w2" placeholder="Word 2"><br>
+<input id="w3" placeholder="Word 3"><br>
+<input id="w4" placeholder="Word 4"><br>
+<input id="w5" placeholder="Word 5"><br><br>
+
+<button onclick="checkWords()">Unlock</button>
+
+<div id="success">
+🎉 You found the Golden Egg! 🎉<br>
+Bring this screen to IT to claim your prize!
+</div>
+
+</body>
+</html>
