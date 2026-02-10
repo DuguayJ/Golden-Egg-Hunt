@@ -16,19 +16,20 @@ body {
   background: linear-gradient(135deg, #ffd700, #ff9a00);
 }
 
-/* Sparkle background */
+/* Sparkles */
 .sparkle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
+  position: fixed;
+  width: 5px;
+  height: 5px;
   background: white;
   border-radius: 50%;
-  animation: float 8s linear infinite;
-  opacity: 0.7;
+  animation: float linear infinite;
+  opacity: 0.8;
+  z-index: 0;
 }
 
 @keyframes float {
-  from { transform: translateY(100vh); }
+  from { transform: translateY(110vh); }
   to { transform: translateY(-10vh); }
 }
 
@@ -44,20 +45,28 @@ body {
   z-index: 1;
 }
 
+/* Idle egg glow */
 .egg {
   font-size: 70px;
   cursor: pointer;
+  animation: idleGlow 2s infinite alternate;
   transition: transform 0.3s ease;
 }
 
-.egg.win {
-  transform: scale(1.5);
-  animation: glow 1s infinite alternate;
+@keyframes idleGlow {
+  from { text-shadow: 0 0 10px #fff; }
+  to { text-shadow: 0 0 25px #ffd700; }
 }
 
-@keyframes glow {
-  from { text-shadow: 0 0 10px #fff; }
-  to { text-shadow: 0 0 40px #ffd700; }
+/* Win animation */
+.egg.win {
+  transform: scale(1.6);
+  animation: winGlow 0.8s infinite alternate;
+}
+
+@keyframes winGlow {
+  from { text-shadow: 0 0 20px #fff; }
+  to { text-shadow: 0 0 50px gold; }
 }
 
 input {
@@ -88,14 +97,13 @@ button {
   position: fixed;
   width: 10px;
   height: 10px;
-  background: red;
-  top: 0;
-  animation: fall 3s linear forwards;
+  top: -10px;
+  animation: fall linear forwards;
 }
 
 @keyframes fall {
   to {
-    transform: translateY(100vh) rotate(720deg);
+    transform: translateY(110vh) rotate(720deg);
   }
 }
 </style>
@@ -121,8 +129,7 @@ function celebrate() {
   document.getElementById("success").style.display = "block";
   document.getElementById("egg").classList.add("win");
 
-  // Confetti burst
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 100; i++) {
     let c = document.createElement("div");
     c.className = "confetti";
     c.style.left = Math.random() * 100 + "vw";
@@ -131,21 +138,22 @@ function celebrate() {
     c.style.animationDuration = (Math.random()*2+2) + "s";
     document.body.appendChild(c);
 
-    setTimeout(() => c.remove(), 3000);
+    setTimeout(() => c.remove(), 4000);
   }
 }
 
-/* Sparkles generator */
-for (let i = 0; i < 30; i++) {
-  let s = document.createElement("div");
-  s.className = "sparkle";
-  s.style.left = Math.random()*100 + "vw";
-  s.style.animationDuration = (Math.random()*6+4)+"s";
-  s.style.opacity = Math.random();
-  document.body.appendChild(s);
-}
+/* Sparkle generator AFTER page loads */
+window.onload = function() {
+  for (let i = 0; i < 40; i++) {
+    let s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.left = Math.random()*100 + "vw";
+    s.style.animationDuration = (Math.random()*6+4)+"s";
+    document.body.appendChild(s);
+  }
+};
 
-/* Secret egg tap */
+/* Secret egg */
 let taps = 0;
 function secretEgg() {
   taps++;
@@ -161,7 +169,7 @@ function secretEgg() {
 
 <div class="card">
 
-<div id="egg" class="egg" onclick="secretEgg()">🥇</div>
+<div id="egg" class="egg" onclick="secretEgg()">🥚</div>
 
 <h1>Unlock the Golden Egg</h1>
 
@@ -181,4 +189,3 @@ function secretEgg() {
 
 </body>
 </html>
-
