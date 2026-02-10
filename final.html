@@ -93,6 +93,8 @@ button {
 
 <script>
 var correctWords = ["GOLD","QUEST","HIDDEN","KEY","RISE"];
+var celebrationActive = false;
+var chickenOnScreen = false;
 
 function checkWords() {
   var inputs = [];
@@ -147,8 +149,33 @@ function showVictoryScreen() {
 
 function tapVictory() {
 
-  // Create egg/chicken element
+  // Prevent spam explosions
+  if (celebrationActive) return;
+  celebrationActive = true;
+
+  // If chicken already exists, just wiggle it
+  if (chickenOnScreen) {
+    var existing = document.getElementById("mainChicken");
+    if (existing) {
+      existing.animate([
+        { transform: "translate(-50%, -50%) rotate(0deg)" },
+        { transform: "translate(-48%, -52%) rotate(-10deg)" },
+        { transform: "translate(-52%, -48%) rotate(10deg)" },
+        { transform: "translate(-50%, -50%) rotate(0deg)" }
+      ], { duration: 300 });
+    }
+
+    setTimeout(function() {
+      celebrationActive = false;
+    }, 300);
+
+    return;
+  }
+
+  chickenOnScreen = true;
+
   var burst = document.createElement("div");
+  burst.id = "mainChicken";
   burst.style.position = "fixed";
   burst.style.left = "50%";
   burst.style.top = "50%";
@@ -159,7 +186,6 @@ function tapVictory() {
 
   document.body.appendChild(burst);
 
-  // Egg shake
   burst.animate([
     { transform: "translate(-50%, -50%) rotate(0deg)" },
     { transform: "translate(-48%, -52%) rotate(-12deg)" },
@@ -169,15 +195,14 @@ function tapVictory() {
 
   setTimeout(function() {
 
-    // Chicken pop
     burst.innerHTML = "🐣";
+
     burst.animate([
       { transform: "translate(-50%, -50%) scale(0.4)" },
       { transform: "translate(-50%, -75%) scale(1.6)" },
       { transform: "translate(-50%, -50%) scale(1)" }
     ], { duration: 500 });
 
-    // Floating chicken idle animation
     burst.animate([
       { transform: "translate(-50%, -50%)" },
       { transform: "translate(-50%, -60%)" },
@@ -187,29 +212,7 @@ function tapVictory() {
       iterations: Infinity
     });
 
-    // Golden aura ring
-    var aura = document.createElement("div");
-    aura.style.position = "fixed";
-    aura.style.left = "50%";
-    aura.style.top = "50%";
-    aura.style.width = "20px";
-    aura.style.height = "20px";
-    aura.style.border = "4px solid gold";
-    aura.style.borderRadius = "50%";
-    aura.style.zIndex = "9997";
-
-    aura.animate([
-      { transform: "translate(-50%, -50%) scale(1)", opacity: 1 },
-      { transform: "translate(-50%, -50%) scale(8)", opacity: 0 }
-    ], { duration: 800 });
-
-    document.body.appendChild(aura);
-
-    setTimeout(function() {
-      document.body.removeChild(aura);
-    }, 800);
-
-    // Chunky pixel explosion
+    // Pixel explosion
     for (var i = 0; i < 40; i++) {
       var pixel = document.createElement("div");
       pixel.style.position = "fixed";
@@ -235,7 +238,7 @@ function tapVictory() {
             "px)",
           opacity: 0
         }
-      ], { duration: 700, easing: "ease-out" });
+      ], { duration: 700 });
 
       document.body.appendChild(pixel);
 
@@ -246,12 +249,20 @@ function tapVictory() {
       })(pixel);
     }
 
-    // Fireworks bursts
     for (var f = 0; f < 3; f++) {
       setTimeout(function() {
         createFirework();
       }, f * 200);
     }
+
+  }, 300);
+
+  // Cooldown reset
+  setTimeout(function() {
+    celebrationActive = false;
+  }, 1500);
+}
+
 
     // WIN banner
     var win = document.createElement("div");
@@ -387,6 +398,7 @@ function secretEgg() {
 
 </body>
 </html>
+
 
 
 
