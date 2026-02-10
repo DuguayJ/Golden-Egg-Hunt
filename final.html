@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +7,7 @@
 <style>
 body {
   margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: Arial, sans-serif;
   height: 100vh;
   overflow: hidden;
   display: flex;
@@ -46,20 +45,17 @@ body {
   z-index: 1;
 }
 
-/* Egg animation */
 .egg {
   font-size: 70px;
   cursor: pointer;
-  animation: idleGlow 2s infinite alternate;
-  transition: transform 0.3s ease;
+  animation: glow 2s infinite alternate;
 }
 
-@keyframes idleGlow {
+@keyframes glow {
   from { text-shadow: 0 0 10px #fff; }
   to { text-shadow: 0 0 25px #ffd700; }
 }
 
-/* Confetti */
 .confetti {
   position: fixed;
   width: 10px;
@@ -70,6 +66,12 @@ body {
 
 @keyframes fall {
   to { transform: translateY(110vh) rotate(720deg); }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 15px gold; }
+  50% { box-shadow: 0 0 35px gold; }
+  100% { box-shadow: 0 0 15px gold; }
 }
 
 input {
@@ -87,34 +89,34 @@ button {
   background: #ffd700;
   cursor: pointer;
 }
-<style>
-@keyframes pulse {
-  0% { box-shadow: 0 0 15px gold; }
-  50% { box-shadow: 0 0 35px gold; }
-  100% { box-shadow: 0 0 15px gold; }
-}
+</style>
 
 <script>
-const correctWords = ["GOLD", "QUEST", "HIDDEN", "KEY", "RISE"];
+var correctWords = ["GOLD","QUEST","HIDDEN","KEY","RISE"];
 
 function checkWords() {
-  let inputs = [];
+  var inputs = [];
 
-  for (let i = 1; i <= 5; i++) {
-    let word = document.getElementById("w" + i).value.trim().toUpperCase();
+  for (var i = 1; i <= 5; i++) {
+    var word = document.getElementById("w" + i).value.toUpperCase().trim();
     inputs.push(word);
   }
 
-  let matched = correctWords.every(w => inputs.includes(w));
+  var matched = true;
+  for (var j = 0; j < correctWords.length; j++) {
+    if (inputs.indexOf(correctWords[j]) === -1) {
+      matched = false;
+      break;
+    }
+  }
 
   if (matched) celebrate();
   else alert("Not quite right — keep hunting!");
 }
 
 function celebrate() {
-  const egg = document.getElementById("egg");
+  var egg = document.getElementById("egg");
 
-  // Egg crack animation
   egg.innerHTML = "💥";
   egg.style.transform = "scale(1.8)";
 
@@ -124,64 +126,59 @@ function celebrate() {
 }
 
 function showVictoryScreen() {
-  const card = document.querySelector(".card");
+  var card = document.querySelector(".card");
 
-  card.innerHTML = `
-    <div id="victoryCard" onclick="tapVictory()"
-      style="
-        padding: 30px;
-        border-radius: 20px;
-        background: linear-gradient(135deg, #fff8dc, #ffd700);
-        box-shadow: 0 0 25px gold;
-        animation: pulse 2s infinite;
-        cursor: pointer;
-      ">
+  card.innerHTML =
+    '<div id="victoryCard" onclick="tapVictory()" ' +
+    'style="padding:30px;border-radius:20px;' +
+    'background:linear-gradient(135deg,#fff8dc,#ffd700);' +
+    'box-shadow:0 0 25px gold;animation:pulse 2s infinite;' +
+    'cursor:pointer;">' +
 
-      <div style="font-size:100px;">🥇</div>
+    '<div style="font-size:100px;">🥇</div>' +
+    '<h1>Golden Egg Unlocked!</h1>' +
+    '<p><strong>📸 Tap this card and screenshot to claim your prize</strong></p>' +
+    '<p style="font-size:14px;opacity:0.7;">Official Golden Egg Winner</p>' +
 
-      <h1>Golden Egg Unlocked!</h1>
-
-      <p><strong>📸 Tap this card and screenshot to claim your prize</strong></p>
-
-      <p style="font-size:14px; opacity:0.7;">
-        Official Golden Egg Winner
-      </p>
-
-    </div>
-  `;
+    '</div>';
 }
 
-function launchConfetti() {
-  for (let i = 0; i < 100; i++) {
-    let c = document.createElement("div");
-    c.className = "confetti";
-    c.style.left = Math.random() * 100 + "vw";
-    c.style.background =
-      ["#ffd700","#ff4081","#4caf50","#2196f3"]
-      [Math.floor(Math.random()*4)];
-    c.style.animationDuration = (Math.random()*2+2) + "s";
-
-    document.body.appendChild(c);
-    setTimeout(() => c.remove(), 4000);
-  }
-}
-  
 function tapVictory() {
-  const card = document.getElementById("victoryCard");
+  var card = document.getElementById("victoryCard");
 
   card.style.boxShadow = "0 0 50px white";
   card.style.transform = "scale(1.03)";
 
-  setTimeout(() => {
+  setTimeout(function() {
     card.style.boxShadow = "0 0 25px gold";
     card.style.transform = "scale(1)";
   }, 200);
 }
 
-/* Sparkle generator */
+function launchConfetti() {
+  for (var i = 0; i < 100; i++) {
+    var c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+
+    var colors = ["#ffd700","#ff4081","#4caf50","#2196f3"];
+    c.style.background = colors[Math.floor(Math.random()*4)];
+
+    c.style.animationDuration = (Math.random()*2+2) + "s";
+
+    document.body.appendChild(c);
+
+    (function(el) {
+      setTimeout(function() {
+        document.body.removeChild(el);
+      }, 4000);
+    })(c);
+  }
+}
+
 window.onload = function() {
-  for (let i = 0; i < 40; i++) {
-    let s = document.createElement("div");
+  for (var i = 0; i < 40; i++) {
+    var s = document.createElement("div");
     s.className = "sparkle";
     s.style.left = Math.random()*100 + "vw";
     s.style.animationDuration = (Math.random()*6+4)+"s";
@@ -189,8 +186,7 @@ window.onload = function() {
   }
 };
 
-/* Secret egg */
-let taps = 0;
+var taps = 0;
 function secretEgg() {
   taps++;
   if (taps === 5) {
@@ -221,5 +217,3 @@ function secretEgg() {
 
 </body>
 </html>
-
-
