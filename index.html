@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Egg Unlock</title>
+
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  padding: 50px;
+}
+
+#eggContent {
+  display: none;
+  margin-top: 30px;
+}
+</style>
+
+<script>
+function checkCode() {
+  const correctCode = "SUNRISE";  // ← change per egg
+  const input = document.getElementById("codeInput").value.trim().toUpperCase();
+
+  if (input === correctCode) {
+    document.getElementById("eggContent").style.display = "block";
+    document.getElementById("unlockSection").style.display = "none";
+  } else {
+    alert("Wrong code! Try again.");
+  }
+}
+</script>
+
+</head>
+
+<body>
+
+<div id="unlockSection">
+  <h1>Enter Egg Code</h1>
+  <input id="codeInput" type="text" placeholder="Enter code">
+  <br><br>
+  <button onclick="checkCode()">Unlock Egg</button>
+</div>
+
+<div id="eggContent">
+  <h1>🥚 You Found the Aurora Egg!</h1>
+  <p>Your fragment: <b>K9F</b></p>
+</div>
+
+</body>
+</html>
