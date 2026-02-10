@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body style="margin:0;background:#fffacd;overflow:hidden">
+
+<script>
+setInterval(() => {
+  let c = document.createElement("div");
+  c.innerHTML = "🐔";
+  c.style.position = "absolute";
+  c.style.left = Math.random()*100+"vw";
+  c.style.top = Math.random()*100+"vh";
+  c.style.fontSize = "40px";
+  document.body.appendChild(c);
+}, 200);
+</script>
+
+</body>
+</html>
