@@ -1,17 +1,52 @@
 <!DOCTYPE html>
 <html>
-<body style="margin:0;background:#fffacd;overflow:hidden">
+<head>
+<title>System Update</title>
+<style>
+body {
+  font-family: Arial;
+  background: black;
+  color: #00ff00;
+  text-align: center;
+  padding-top: 100px;
+}
+.bar {
+  width: 80%;
+  height: 30px;
+  border: 2px solid #00ff00;
+  margin: auto;
+}
+.fill {
+  height: 100%;
+  width: 99%;
+  background: #00ff00;
+}
+button {
+  margin-top: 30px;
+  padding: 12px 20px;
+  font-size: 18px;
+}
+</style>
+</head>
+<body>
+
+<h1>Installing Golden Egg Update...</h1>
+
+<div class="bar">
+  <div class="fill"></div>
+</div>
+
+<p id="status">99% Complete</p>
+
+<button id="reveal" style="display:none"
+onclick="alert('APRIL FOOLS 😂')">
+Continue
+</button>
 
 <script>
-setInterval(() => {
-  let c = document.createElement("div");
-  c.innerHTML = "🐔";
-  c.style.position = "absolute";
-  c.style.left = Math.random()*100+"vw";
-  c.style.top = Math.random()*100+"vh";
-  c.style.fontSize = "40px";
-  document.body.appendChild(c);
-}, 200);
+setTimeout(() => {
+  document.getElementById("reveal").style.display = "inline-block";
+}, 5000);
 </script>
 
 </body>
