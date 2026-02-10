@@ -86,7 +86,12 @@ button {
   background: #ffd700;
   cursor: pointer;
 }
-</style>
+<style>
+@keyframes pulse {
+  0% { box-shadow: 0 0 15px gold; }
+  50% { box-shadow: 0 0 35px gold; }
+  100% { box-shadow: 0 0 15px gold; }
+}
 
 <script>
 const correctWords = ["GOLD", "QUEST", "HIDDEN", "KEY", "RISE"];
@@ -121,10 +126,27 @@ function showVictoryScreen() {
   const card = document.querySelector(".card");
 
   card.innerHTML = `
-    <div class="egg" style="font-size:90px;">🥚</div>
-    <h1>Golden Egg Unlocked!</h1>
-    <p><strong>Congratulations!</strong></p>
-    <p>📸 Screenshot this screen to claim your prize.</p>
+    <div id="victoryCard" onclick="tapVictory()"
+      style="
+        padding: 30px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #fff8dc, #ffd700);
+        box-shadow: 0 0 25px gold;
+        animation: pulse 2s infinite;
+        cursor: pointer;
+      ">
+
+      <div style="font-size:100px;">🥇</div>
+
+      <h1>Golden Egg Unlocked!</h1>
+
+      <p><strong>📸 Tap this card and screenshot to claim your prize</strong></p>
+
+      <p style="font-size:14px; opacity:0.7;">
+        Official Golden Egg Winner
+      </p>
+
+    </div>
   `;
 }
 
@@ -141,6 +163,18 @@ function launchConfetti() {
     document.body.appendChild(c);
     setTimeout(() => c.remove(), 4000);
   }
+}
+  
+function tapVictory() {
+  const card = document.getElementById("victoryCard");
+
+  card.style.boxShadow = "0 0 50px white";
+  card.style.transform = "scale(1.03)";
+
+  setTimeout(() => {
+    card.style.boxShadow = "0 0 25px gold";
+    card.style.transform = "scale(1)";
+  }, 200);
 }
 
 /* Sparkle generator */
@@ -186,4 +220,5 @@ function secretEgg() {
 
 </body>
 </html>
+
 
