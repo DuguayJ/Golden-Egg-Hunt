@@ -6,22 +6,97 @@
 
 <style>
 body {
-  font-family: Arial;
-  text-align: center;
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ffd700, #ff9a00);
+}
+
+/* Sparkle background */
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  animation: float 8s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-10vh); }
+}
+
+.card {
+  position: relative;
+  background: rgba(255,255,255,0.95);
   padding: 40px;
+  border-radius: 24px;
+  text-align: center;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+  max-width: 420px;
+  width: 92%;
+  z-index: 1;
+}
+
+.egg {
+  font-size: 70px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.egg.win {
+  transform: scale(1.5);
+  animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #fff; }
+  to { text-shadow: 0 0 40px #ffd700; }
 }
 
 input {
   margin: 5px;
   padding: 10px;
   font-size: 16px;
+  width: 80%;
+}
+
+button {
+  padding: 12px 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  background: #ffd700;
+  cursor: pointer;
 }
 
 #success {
   display: none;
-  margin-top: 30px;
-  font-size: 24px;
+  margin-top: 20px;
+  font-size: 22px;
   color: green;
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: red;
+  top: 0;
+  animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(720deg);
+  }
 }
 </style>
 
@@ -38,10 +113,44 @@ function checkWords() {
 
   let matched = correctWords.every(w => inputs.includes(w));
 
-  if (matched) {
-    document.getElementById("success").style.display = "block";
-  } else {
-    alert("Not quite right — keep hunting!");
+  if (matched) celebrate();
+  else alert("Not quite right — keep hunting!");
+}
+
+function celebrate() {
+  document.getElementById("success").style.display = "block";
+  document.getElementById("egg").classList.add("win");
+
+  // Confetti burst
+  for (let i = 0; i < 80; i++) {
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background =
+      ["#ffd700","#ff4081","#4caf50","#2196f3"][Math.floor(Math.random()*4)];
+    c.style.animationDuration = (Math.random()*2+2) + "s";
+    document.body.appendChild(c);
+
+    setTimeout(() => c.remove(), 3000);
+  }
+}
+
+/* Sparkles generator */
+for (let i = 0; i < 30; i++) {
+  let s = document.createElement("div");
+  s.className = "sparkle";
+  s.style.left = Math.random()*100 + "vw";
+  s.style.animationDuration = (Math.random()*6+4)+"s";
+  s.style.opacity = Math.random();
+  document.body.appendChild(s);
+}
+
+/* Secret egg tap */
+let taps = 0;
+function secretEgg() {
+  taps++;
+  if (taps === 5) {
+    alert("🥚 Secret Egg Found! You are elite.");
   }
 }
 </script>
@@ -50,9 +159,11 @@ function checkWords() {
 
 <body>
 
-<h1>Unlock the Golden Egg</h1>
+<div class="card">
 
-<p>Enter your 5 words:</p>
+<div id="egg" class="egg" onclick="secretEgg()">🥇</div>
+
+<h1>Unlock the Golden Egg</h1>
 
 <input id="w1" placeholder="Word 1"><br>
 <input id="w2" placeholder="Word 2"><br>
@@ -63,9 +174,11 @@ function checkWords() {
 <button onclick="checkWords()">Unlock</button>
 
 <div id="success">
-🎉🥚 You found the Golden Egg!🥚 🎉<br>
-Bring this screen to IT to claim your prize!
+🎉 Golden Egg Unlocked! Bring this to IT for your prize!
+</div>
+
 </div>
 
 </body>
 </html>
+
