@@ -2,50 +2,37 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Egg Unlock</title>
+<title>Golden Egg Hunt</title>
 
 <style>
 body {
   font-family: Arial;
   text-align: center;
-  padding: 50px;
+  padding: 40px;
 }
-
-#eggContent {
-  display: none;
-  margin-top: 30px;
+button {
+  padding: 15px;
+  font-size: 18px;
 }
 </style>
-
-<script>
-function checkCode() {
-  const correctCode = "SUNRISE";  // ← change per egg
-  const input = document.getElementById("codeInput").value.trim().toUpperCase();
-
-  if (input === correctCode) {
-    document.getElementById("eggContent").style.display = "block";
-    document.getElementById("unlockSection").style.display = "none";
-  } else {
-    alert("Wrong code! Try again.");
-  }
-}
-</script>
 
 </head>
 
 <body>
 
-<div id="unlockSection">
-  <h1>Enter Egg Code</h1>
-  <input id="codeInput" type="text" placeholder="Enter code">
-  <br><br>
-  <button onclick="checkCode()">Unlock Egg</button>
-</div>
+<h1>🥚 Golden Egg Hunt</h1>
 
-<div id="eggContent">
-  <h1>🥚 You Found the Aurora Egg!</h1>
-  <p>Your fragment: <b>K9F</b></p>
-</div>
+<p>
+Scan QR codes around the building to collect 5 secret words.
+</p>
+
+<p>
+When you have all 5, unlock the Golden Egg!
+</p>
+
+<a href="final.html">
+<button>Unlock Golden Egg</button>
+</a>
 
 </body>
 </html>
