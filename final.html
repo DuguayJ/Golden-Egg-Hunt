@@ -143,10 +143,13 @@ function showVictoryScreen() {
     '</div>';
 }
 
-function tapVictory() {
-  var card = document.getElementById("victoryCard");
 
-  // Create egg explosion overlay
+
+function tapVictory() {
+  var centerX = window.innerWidth / 2;
+  var centerY = window.innerHeight / 2;
+
+  // Egg burst element
   var burst = document.createElement("div");
   burst.style.position = "fixed";
   burst.style.left = "50%";
@@ -161,74 +164,158 @@ function tapVictory() {
   // Shake egg
   burst.animate([
     { transform: "translate(-50%, -50%) rotate(0deg)" },
-    { transform: "translate(-48%, -52%) rotate(-10deg)" },
-    { transform: "translate(-52%, -48%) rotate(10deg)" },
+    { transform: "translate(-48%, -52%) rotate(-12deg)" },
+    { transform: "translate(-52%, -48%) rotate(12deg)" },
     { transform: "translate(-50%, -50%) rotate(0deg)" }
-  ], {
-    duration: 300,
-    iterations: 2
-  });
+  ], { duration: 300, iterations: 2 });
 
-  // Crack → chicken
   setTimeout(function() {
+
+    // Chicken pop
     burst.innerHTML = "🐣";
-
     burst.animate([
-      { transform: "translate(-50%, -50%) scale(0.5)" },
-      { transform: "translate(-50%, -70%) scale(1.4)" },
+      { transform: "translate(-50%, -50%) scale(0.4)" },
+      { transform: "translate(-50%, -75%) scale(1.6)" },
       { transform: "translate(-50%, -50%) scale(1)" }
-    ], {
-      duration: 500
-    });
+    ], { duration: 500 });
 
-    // Spark burst
-    for (var i = 0; i < 20; i++) {
-      var spark = document.createElement("div");
-      spark.style.position = "fixed";
-      spark.style.left = "50%";
-      spark.style.top = "50%";
-      spark.style.width = "6px";
-      spark.style.height = "6px";
-      spark.style.background = "gold";
-      spark.style.borderRadius = "50%";
-      spark.style.zIndex = "9998";
+    // Golden aura ring
+    var aura = document.createElement("div");
+    aura.style.position = "fixed";
+    aura.style.left = "50%";
+    aura.style.top = "50%";
+    aura.style.width = "20px";
+    aura.style.height = "20px";
+    aura.style.border = "4px solid gold";
+    aura.style.borderRadius = "50%";
+    aura.style.zIndex = "9997";
+
+    aura.animate([
+      { transform: "translate(-50%, -50%) scale(1)", opacity: 1 },
+      { transform: "translate(-50%, -50%) scale(8)", opacity: 0 }
+    ], { duration: 800 });
+
+    document.body.appendChild(aura);
+
+    setTimeout(function() {
+      document.body.removeChild(aura);
+    }, 800);
+
+    // Pixel explosion
+    for (var i = 0; i < 40; i++) {
+      var pixel = document.createElement("div");
+      pixel.style.position = "fixed";
+      pixel.style.left = "50%";
+      pixel.style.top = "50%";
+      pixel.style.width = "8px";
+      pixel.style.height = "8px";
+      pixel.style.background = "#ffd700";
+      pixel.style.zIndex = "9998";
 
       var angle = Math.random() * Math.PI * 2;
-      var distance = 120 + Math.random() * 80;
+      var distance = 150 + Math.random() * 100;
 
-      spark.animate([
-        { transform: "translate(-50%, -50%)" },
+      pixel.animate([
+        { transform: "translate(-50%, -50%)", opacity: 1 },
         {
           transform:
             "translate(" +
             (Math.cos(angle) * distance) +
             "px," +
             (Math.sin(angle) * distance) +
-            "px)"
+            "px)",
+          opacity: 0
         }
-      ], {
-        duration: 600,
-        easing: "ease-out"
-      });
+      ], { duration: 700, easing: "ease-out" });
 
-      document.body.appendChild(spark);
+      document.body.appendChild(pixel);
 
-      (function(s) {
+      (function(p) {
         setTimeout(function() {
-          document.body.removeChild(s);
-        }, 600);
-      })(spark);
+          document.body.removeChild(p);
+        }, 700);
+      })(pixel);
     }
+
+    // Fireworks bursts
+    for (var f = 0; f < 3; f++) {
+      setTimeout(function() {
+        createFirework();
+      }, f * 200);
+    }
+
+    // Mario-style WIN burst
+    var win = document.createElement("div");
+    win.innerHTML = "⭐ WIN! ⭐";
+    win.style.position = "fixed";
+    win.style.left = "50%";
+    win.style.top = "30%";
+    win.style.transform = "translate(-50%, -50%)";
+    win.style.fontSize = "48px";
+    win.style.fontWeight = "bold";
+    win.style.color = "gold";
+    win.style.zIndex = "9999";
+
+    win.animate([
+      { transform: "translate(-50%, -50%) scale(0.3)", opacity: 0 },
+      { transform: "translate(-50%, -50%) scale(1.4)", opacity: 1 },
+      { transform: "translate(-50%, -50%) scale(1)", opacity: 1 }
+    ], { duration: 600 });
+
+    document.body.appendChild(win);
+
+    setTimeout(function() {
+      document.body.removeChild(win);
+    }, 1500);
 
   }, 300);
 
-  // Cleanup
   setTimeout(function() {
     document.body.removeChild(burst);
-  }, 1200);
+  }, 1500);
 }
 
+function createFirework() {
+  var x = Math.random() * window.innerWidth;
+  var y = Math.random() * window.innerHeight * 0.6;
 
+  for (var i = 0; i < 20; i++) {
+    var spark = document.createElement("div");
+    spark.style.position = "fixed";
+    spark.style.left = x + "px";
+    spark.style.top = y + "px";
+    spark.style.width = "6px";
+    spark.style.height = "6px";
+    spark.style.background = ["red","gold","blue","lime"]
+      [Math.floor(Math.random()*4)];
+    spark.style.borderRadius = "50%";
+    spark.style.zIndex = "9998";
+
+    var angle = Math.random() * Math.PI * 2;
+    var dist = 80 + Math.random() * 60;
+
+    spark.animate([
+      { transform: "translate(0,0)", opacity: 1 },
+      {
+        transform:
+          "translate(" +
+          Math.cos(angle) * dist +
+          "px," +
+          Math.sin(angle) * dist +
+          "px)",
+        opacity: 0
+      }
+    ], { duration: 800 });
+
+    document.body.appendChild(spark);
+
+    (function(s) {
+      setTimeout(function() {
+        document.body.removeChild(s);
+      }, 800);
+    })(spark);
+  }
+}
 
 function launchConfetti() {
   for (var i = 0; i < 100; i++) {
@@ -292,6 +379,7 @@ function secretEgg() {
 
 </body>
 </html>
+
 
 
 
