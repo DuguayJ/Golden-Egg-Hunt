@@ -88,6 +88,23 @@ button {
   background: #ffd700;
   cursor: pointer;
 }
+  .gold-egg {
+  font-size: 100px;
+  filter: drop-shadow(0 0 10px gold);
+  animation: goldPulse 2s infinite alternate;
+}
+
+@keyframes goldPulse {
+  from {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px gold) brightness(1.1);
+  }
+  to {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 30px gold) brightness(1.4);
+  }
+}
+
 </style>
 
 <script>
@@ -122,7 +139,7 @@ function showVictoryScreen() {
     'background:linear-gradient(135deg,#fff8dc,#ffd700);' +
     'box-shadow:0 0 25px gold;animation:pulse 2s infinite;' +
     'cursor:pointer;">' +
-    '<div style="font-size:100px;">🥚</div>' +
+   '<div class="gold-egg">✨🥚✨</div>' +
     '<h1>Golden Egg Unlocked!</h1>' +
     '<p><strong>📸 Tap and screenshot to claim your prize</strong></p>' +
     '</div>';
@@ -281,3 +298,4 @@ function secretEgg(){
 
 </body>
 </html>
+
