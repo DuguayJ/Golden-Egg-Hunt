@@ -1,61 +1,110 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>System Update</title>
+<title>Golden Egg Update</title>
 
 <style>
 body {
-  font-family: Arial;
-  background: black;
-  color: #00ff00;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #fff6cc, #ffe066);
   text-align: center;
-  padding-top: 100px;
+  padding-top: 80px;
+  color: #5a4a00;
+  overflow: hidden;
+}
+
+/* Bouncing egg */
+.bounce-egg {
+  font-size: 60px;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
 }
 
 .bar {
   width: 80%;
-  height: 30px;
-  border: 2px solid #00ff00;
-  margin: auto;
+  height: 40px;
+  border-radius: 20px;
+  background: #fff;
+  margin: 30px auto;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .fill {
   height: 100%;
   width: 0%;
-  background: #00ff00;
+  background: linear-gradient(90deg, gold, orange);
   transition: width 0.2s linear;
+  position: relative;
+}
+
+/* Spinning egg inside bar */
+.spin-egg {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
 }
 
 button {
   margin-top: 30px;
-  padding: 12px 20px;
-  font-size: 18px;
-  display: none;
+  padding: 15px 25px;
+  font-size: 20px;
+  border: none;
+  border-radius: 12px;
+  background: gold;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  top: -10px;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+  }
 }
 </style>
 </head>
 
 <body>
 
-<h1>Installing Golden Egg Update...</h1>
+<div class="bounce-egg">🥚</div>
+
+<h1>Installing Golden Egg Fun Update...</h1>
 
 <div class="bar">
-  <div class="fill" id="fill"></div>
+  <div class="fill" id="fill">
+    <div class="spin-egg">🥚</div>
+  </div>
 </div>
 
 <p id="status">0% Complete</p>
-
-<button id="reveal"
-onclick="location.href='index.html'">
-Continue
-</button>
 
 <script>
 let progress = 0;
 let fill = document.getElementById("fill");
 let status = document.getElementById("status");
 
-// Load from 0 → 99
 let loader = setInterval(() => {
 
   progress++;
@@ -63,8 +112,6 @@ let loader = setInterval(() => {
   if (progress >= 99) {
     progress = 99;
     clearInterval(loader);
-
-    // Stay stuck at 99% for 10 seconds
     setTimeout(showAprilFools, 10000);
   }
 
@@ -74,14 +121,33 @@ let loader = setInterval(() => {
 }, 60);
 
 function showAprilFools() {
+
+  launchConfetti();
+
   document.body.innerHTML = `
     <h1 style="color:gold">APRIL FOOLS 😂</h1>
-    <p>Your Golden Egg update was a prank.</p>
-    <button onclick="location.href='index.html'"
-      style="padding:15px 25px;font-size:20px;">
+    <p>This was a fake QR — the real ones are still out there!</p>
+    <button onclick="location.href='index.html'">
       Return to Hunt
     </button>
   `;
+}
+
+function launchConfetti() {
+  for (let i = 0; i < 100; i++) {
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background =
+      ["#ffd700","#ff4081","#4caf50","#2196f3"]
+      [Math.floor(Math.random()*4)];
+    c.style.animationDuration =
+      (Math.random()*2+2) + "s";
+
+    document.body.appendChild(c);
+
+    setTimeout(() => c.remove(), 4000);
+  }
 }
 </script>
 
