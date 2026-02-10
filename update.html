@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>System Update</title>
+
 <style>
 body {
   font-family: Arial;
@@ -10,43 +11,78 @@ body {
   text-align: center;
   padding-top: 100px;
 }
+
 .bar {
   width: 80%;
   height: 30px;
   border: 2px solid #00ff00;
   margin: auto;
 }
+
 .fill {
   height: 100%;
-  width: 99%;
+  width: 0%;
   background: #00ff00;
+  transition: width 0.2s linear;
 }
+
 button {
   margin-top: 30px;
   padding: 12px 20px;
   font-size: 18px;
+  display: none;
 }
 </style>
 </head>
+
 <body>
 
 <h1>Installing Golden Egg Update...</h1>
 
 <div class="bar">
-  <div class="fill"></div>
+  <div class="fill" id="fill"></div>
 </div>
 
-<p id="status">99% Complete</p>
+<p id="status">0% Complete</p>
 
-<button id="reveal" style="display:none"
-onclick="alert('APRIL FOOLS 😂')">
+<button id="reveal"
+onclick="location.href='index.html'">
 Continue
 </button>
 
 <script>
-setTimeout(() => {
-  document.getElementById("reveal").style.display = "inline-block";
-}, 5000);
+let progress = 0;
+let fill = document.getElementById("fill");
+let status = document.getElementById("status");
+
+// Load from 0 → 99
+let loader = setInterval(() => {
+
+  progress++;
+
+  if (progress >= 99) {
+    progress = 99;
+    clearInterval(loader);
+
+    // Stay stuck at 99% for 10 seconds
+    setTimeout(showAprilFools, 10000);
+  }
+
+  fill.style.width = progress + "%";
+  status.innerText = progress + "% Complete";
+
+}, 60);
+
+function showAprilFools() {
+  document.body.innerHTML = `
+    <h1 style="color:gold">APRIL FOOLS 😂</h1>
+    <p>Your Golden Egg update was a prank.</p>
+    <button onclick="location.href='index.html'"
+      style="padding:15px 25px;font-size:20px;">
+      Return to Hunt
+    </button>
+  `;
+}
 </script>
 
 </body>
