@@ -1,18 +1,150 @@
 <!DOCTYPE html>
 <html>
-<body style="margin:0;background:#fffacd;overflow:hidden">
+<head>
+<title>Chicken Takeover</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fffacd;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* UI banner */
+.ui {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: gold;
+  padding: 15px;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+button {
+  margin-top: 8px;
+  padding: 10px 18px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.chicken {
+  position: absolute;
+  font-size: 40px;
+  transition: transform 3s linear;
+}
+
+.gold {
+  filter: drop-shadow(0 0 8px gold);
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: drop-shadow(0 0 6px gold); }
+  to { filter: drop-shadow(0 0 18px gold); }
+}
+
+.explosion-egg {
+  position: fixed;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  font-size: 80px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="ui">
+  <h2>🐔 APRIL FOOLS 😂</h2>
+  <p>The real QR codes are still out there!</p>
+  <button onclick="location.href='index.html'">
+    Return to Hunt
+  </button>
+</div>
 
 <script>
-setInterval(() => {
+const MAX_CHICKENS = 80;
+let chickens = [];
+
+function eggExplosion() {
+  let egg = document.createElement("div");
+  egg.className = "explosion-egg";
+  egg.innerHTML = "🥚";
+  document.body.appendChild(egg);
+
+  // Crack animation
+  egg.animate([
+    { transform: "translate(-50%,-50%) scale(1)" },
+    { transform: "translate(-50%,-50%) scale(1.4)" },
+    { transform: "translate(-50%,-50%) scale(0)" }
+  ], { duration: 600 });
+
+  setTimeout(() => {
+    egg.remove();
+
+    // Spawn initial chicken burst
+    for (let i = 0; i < 15; i++) {
+      spawnChicken(true);
+    }
+
+    spawnLoop();
+  }, 600);
+}
+
+function spawnChicken(burst = false) {
+
+  if (chickens.length >= MAX_CHICKENS) {
+    chickens.shift().remove();
+  }
+
   let c = document.createElement("div");
-  c.innerHTML = "🐔";
-  c.style.position = "absolute";
-  c.style.left = Math.random()*100+"vw";
-  c.style.top = Math.random()*100+"vh";
-  c.style.fontSize = "40px";
+  c.className = "chicken";
+
+  // Rare golden chicken (3% chance)
+  if (Math.random() < 0.03) {
+    c.innerHTML = "🐔";
+    c.classList.add("gold");
+  } else {
+    c.innerHTML = "🐔";
+  }
+
+  let x = Math.random() * 100;
+  let y = 20 + Math.random() * 75;
+
+  c.style.left = x + "vw";
+  c.style.top = y + "vh";
+
   document.body.appendChild(c);
-}, 200);
+  chickens.push(c);
+
+  wander(c);
+}
+
+function wander(c) {
+  setInterval(() => {
+    let x = Math.random() * 100;
+    let y = 20 + Math.random() * 75;
+    c.style.transform =
+      `translate(${x - 50}vw, ${y - 50}vh)`;
+  }, 3000);
+}
+
+function spawnLoop() {
+  setInterval(() => {
+    spawnChicken();
+  }, 600);
+}
+
+eggExplosion();
 </script>
 
 </body>
 </html>
+
