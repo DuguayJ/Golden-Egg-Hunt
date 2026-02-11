@@ -1,161 +1,153 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Fish Slap Dimension</title>
+<title>Fish Dimension</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 body {
   margin: 0;
-  background: radial-gradient(circle at center, #b3ecff, #0077aa);
   overflow: hidden;
-  font-family: Arial, sans-serif;
+  background: radial-gradient(circle, #66ccff, #003366);
+  font-family: Arial;
 }
 
-/* UI reveal */
-.ui {
+/* flash overlay */
+.flash {
   position: fixed;
-  top: 0;
-  width: 100%;
-  background: rgba(79,195,247,0.95);
-  padding: 15px;
-  text-align: center;
+  inset: 0;
+  background: white;
   opacity: 0;
-  transition: opacity 1.5s;
-  z-index: 9999;
+  pointer-events: none;
 }
 
-/* Center fish */
+/* centered fish */
 .fish {
   position: fixed;
   left: 50%;
   top: 50%;
-  font-size: 160px;
+  font-size: 200px;
   transform: translate(-50%, -50%) scale(0);
 }
 
-/* Ripple shockwave */
+/* giant ripple */
 .ripple {
   position: fixed;
   left: 50%;
   top: 50%;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 3px solid rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.3);
   transform: translate(-50%, -50%);
 }
 
-/* Bubble ambience */
+/* huge bubbles */
 .bubble {
   position: fixed;
-  bottom: -20px;
-  width: 12px;
-  height: 12px;
-  background: rgba(255,255,255,0.6);
-  border-radius: 50%;
-  animation: rise linear infinite;
+  bottom: -40px;
+  font-size: 30px;
+  animation: rise linear forwards;
 }
 
 @keyframes rise {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-110vh); opacity: 0; }
+  to {
+    transform: translateY(-110vh);
+    opacity: 0;
+  }
 }
 
-/* Slow motion shake */
-@keyframes shake {
-  0% { transform: translate(0,0); }
-  25% { transform: translate(-6px,4px); }
-  50% { transform: translate(6px,-4px); }
-  75% { transform: translate(-3px,4px); }
-  100% { transform: translate(0,0); }
+/* UI */
+.ui {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #4fc3f7;
+  padding: 15px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1.5s;
 }
 
 button {
-  margin-top: 10px;
-  padding: 10px 18px;
+  padding: 10px 20px;
   font-size: 16px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
+<div class="flash" id="flash"></div>
+
 <div class="ui" id="ui">
-  <h2>🐟 APRIL FOOLS 😂</h2>
-  <p>You entered the Fish Dimension. The real QR codes are still out there!</p>
-  <button onclick="location.href='index.html'">
-    Return to Hunt
-  </button>
+<h2>🐟 APRIL FOOLS 😂</h2>
+<p>You entered the Fish Dimension.</p>
+<button onclick="location.href='index.html'">
+Return to Hunt
+</button>
 </div>
 
 <div class="fish" id="fish">🐟</div>
 
 <script>
 let fish = document.getElementById("fish");
+let flash = document.getElementById("flash");
 let ui = document.getElementById("ui");
 
-/* Bubble ambience */
-function spawnBubbles() {
-  setInterval(() => {
-    let b = document.createElement("div");
-    b.className = "bubble";
-    b.style.left = Math.random() * 100 + "vw";
-    b.style.animationDuration = (4 + Math.random() * 3) + "s";
-    document.body.appendChild(b);
-    setTimeout(() => b.remove(), 7000);
-  }, 300);
-}
+/* spawn giant bubbles */
+setInterval(() => {
+  let b = document.createElement("div");
+  b.className = "bubble";
+  b.innerHTML = "🫧";
+  b.style.left = Math.random()*100+"vw";
+  b.style.animationDuration = (3+Math.random()*2)+"s";
+  document.body.appendChild(b);
+  setTimeout(()=>b.remove(),5000);
+}, 200);
 
-spawnBubbles();
-
-/* Fish cinematic entrance */
+/* cinematic entrance */
 fish.animate([
-  { transform: "translate(-50%, -50%) scale(0)" },
-  { transform: "translate(-50%, -50%) scale(1.4)" },
-  { transform: "translate(-50%, -50%) scale(1)" }
+  { transform: "translate(-50%,-50%) scale(0)" },
+  { transform: "translate(-50%,-50%) scale(2.5)" },
+  { transform: "translate(-50%,-50%) scale(1)" }
 ], {
-  duration: 1200,
-  easing: "cubic-bezier(.2,1.6,.4,1)",
+  duration: 1400,
+  easing: "cubic-bezier(.2,1.8,.3,1)",
   fill: "forwards"
 }).onfinish = impact;
 
-/* Impact moment */
+/* impact moment */
 function impact() {
 
-  // Slow motion shake
-  document.body.style.animation = "shake 0.8s";
+  /* white flash */
+  flash.animate([
+    { opacity: 1 },
+    { opacity: 0 }
+  ], { duration: 300 });
 
-  rippleShockwave();
+  /* giant ripple */
+  let r = document.createElement("div");
+  r.className = "ripple";
+  document.body.appendChild(r);
 
-  setTimeout(() => {
-    ui.style.opacity = 1;
-  }, 600);
-}
+  r.animate([
+    { width: "40px", height: "40px", opacity: 1 },
+    { width: "800px", height: "800px", opacity: 0 }
+  ], { duration: 1000 });
 
-/* Ripple effect */
-function rippleShockwave() {
+  setTimeout(()=>r.remove(),1000);
 
-  for (let i = 0; i < 3; i++) {
+  /* bounce fish */
+  fish.animate([
+    { transform: "translate(-50%,-50%) scale(1)" },
+    { transform: "translate(-50%,-60%) scale(1.2)" },
+    { transform: "translate(-50%,-50%) scale(1)" }
+  ], { duration: 500 });
 
-    let r = document.createElement("div");
-    r.className = "ripple";
-    document.body.appendChild(r);
-
-    r.animate([
-      { width: "50px", height: "50px", opacity: 1 },
-      { width: "500px", height: "500px", opacity: 0 }
-    ], {
-      duration: 1200,
-      delay: i * 200
-    });
-
-    setTimeout(() => r.remove(), 1400);
-  }
+  /* reveal UI */
+  setTimeout(()=>ui.style.opacity=1,600);
 }
 </script>
 
