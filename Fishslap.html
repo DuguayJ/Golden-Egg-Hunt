@@ -8,27 +8,54 @@
 <style>
 body {
   margin: 0;
-  background: #e6f7ff;
+  background: #dff6ff;
   overflow: hidden;
   font-family: Arial, sans-serif;
-  text-align: center;
 }
 
+/* UI hidden until slap */
 .ui {
   position: fixed;
   top: 0;
   width: 100%;
   background: #4fc3f7;
   padding: 15px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1s;
   z-index: 9999;
 }
 
 .fish {
   position: fixed;
   top: 50%;
-  left: -200px;
-  font-size: 120px;
+  left: -300px;
+  font-size: 150px;
   transform: translateY(-50%);
+}
+
+/* Screen shake */
+@keyframes shake {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(-10px,5px); }
+  50% { transform: translate(10px,-5px); }
+  75% { transform: translate(-5px,5px); }
+  100% { transform: translate(0,0); }
+}
+
+/* Wiggle loop */
+@keyframes wiggle {
+  0% { rotate: 0deg; }
+  50% { rotate: 6deg; }
+  100% { rotate: 0deg; }
+}
+
+.splash {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: #4fc3f7;
+  border-radius: 50%;
 }
 
 button {
@@ -44,9 +71,9 @@ button {
 
 <body>
 
-<div class="ui">
+<div class="ui" id="ui">
   <h2>🐟 APRIL FOOLS 😂</h2>
-  <p>The real QR codes are still out there!</p>
+  <p>You just got fish slapped. The real QR codes are still out there!</p>
   <button onclick="location.href='index.html'">
     Return to Hunt
   </button>
@@ -56,15 +83,65 @@ button {
 
 <script>
 let fish = document.getElementById("fish");
+let ui = document.getElementById("ui");
 
+/* Fish rocket slam */
 fish.animate([
-  { left: "-200px" },
-  { left: "50%" }
+  { left: "-300px" },
+  { left: "40%" }
 ], {
-  duration: 800,
-  easing: "ease-out",
+  duration: 500,
+  easing: "cubic-bezier(.2,1.5,.5,1)",
   fill: "forwards"
-});
+}).onfinish = impact;
+
+/* Impact event */
+function impact() {
+
+  // Screen shake
+  document.body.style.animation = "shake 0.4s";
+
+  // Splash particles
+  splashBurst();
+
+  // Fish wiggle loop
+  fish.style.animation = "wiggle 1s infinite";
+
+  // Reveal UI
+  setTimeout(() => {
+    ui.style.opacity = 1;
+  }, 400);
+}
+
+/* Splash particle burst */
+function splashBurst() {
+
+  let rect = fish.getBoundingClientRect();
+  let cx = rect.left + rect.width / 2;
+  let cy = rect.top + rect.height / 2;
+
+  for (let i = 0; i < 25; i++) {
+
+    let s = document.createElement("div");
+    s.className = "splash";
+    s.style.left = cx + "px";
+    s.style.top = cy + "px";
+
+    let angle = Math.random() * Math.PI * 2;
+    let dist = 100 + Math.random() * 80;
+
+    s.animate([
+      { transform: "translate(0,0)", opacity: 1 },
+      {
+        transform: `translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`,
+        opacity: 0
+      }
+    ], { duration: 700 });
+
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 700);
+  }
+}
 </script>
 
 </body>
