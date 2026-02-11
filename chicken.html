@@ -3,6 +3,8 @@
 <head>
 <title>Chicken Takeover</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 body {
   margin: 0;
@@ -10,6 +12,11 @@ body {
   background: #fffacd;
   overflow: hidden;
   text-align: center;
+
+  /* MOBILE STABILITY FIX */
+  height: 100dvh;
+  position: fixed;
+  width: 100%;
 }
 
 /* UI banner */
@@ -22,6 +29,10 @@ body {
   padding: 15px;
   z-index: 9999;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+
+  /* smooth mobile rendering */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 button {
@@ -36,7 +47,7 @@ button {
 .chicken {
   position: absolute;
   font-size: 40px;
-  transition: transform 3s linear;
+  transition: left 3s linear, top 3s linear;
 }
 
 /* Gold chicken */
@@ -108,10 +119,7 @@ function eggExplosion() {
   setTimeout(() => {
     egg.remove();
 
-    for (let i = 0; i < 15; i++) {
-      spawnChicken();
-    }
-
+    for (let i = 0; i < 15; i++) spawnChicken();
     spawnLoop();
   }, 600);
 }
@@ -127,24 +135,17 @@ function spawnChicken() {
   egg.className = "chicken";
   egg.innerHTML = "🥚";
 
-  let x = Math.random() * 100;
-  let y = 20 + Math.random() * 75;
-
-  egg.style.left = x + "vw";
-  egg.style.top = y + "vh";
-
+  placeRandom(egg);
   document.body.appendChild(egg);
 
   setTimeout(() => {
 
     let rarity = "normal";
 
-    // Rainbow (ultra rare)
     if (!rainbowExists && Math.random() < 0.0005) {
       rarity = "rainbow";
       rainbowExists = true;
     }
-    // Gold
     else if (!goldExists && Math.random() < 0.005) {
       rarity = "gold";
       goldExists = true;
@@ -168,16 +169,18 @@ function spawnChicken() {
   }, 400);
 }
 
-/* Wandering movement */
+/* Random safe placement (avoids UI bar) */
+function placeRandom(el) {
+  let x = Math.random() * window.innerWidth;
+  let y = 100 + Math.random() * (window.innerHeight - 140);
+
+  el.style.left = x + "px";
+  el.style.top = y + "px";
+}
+
+/* Wandering movement (mobile-safe) */
 function wander(c) {
-  setInterval(() => {
-    let x = Math.random() * 100;
-    let y = 20 + Math.random() * 75;
-
-    c.style.transform =
-      `translate(${x - 50}vw, ${y - 50}vh)`;
-
-  }, 3000);
+  setInterval(() => placeRandom(c), 3000);
 }
 
 /* Spawn loop */
