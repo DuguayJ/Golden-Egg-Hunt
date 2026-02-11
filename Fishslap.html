@@ -6,14 +6,123 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
+
+/* ---------- OCEAN BASE ---------- */
+
 body {
   margin: 0;
   overflow: hidden;
-  background: radial-gradient(circle, #66ccff, #003366);
   font-family: Arial;
+
+  background:
+    radial-gradient(circle at 50% 20%, #8edfff, #003344 70%),
+    linear-gradient(#006699, #001122);
+
+  animation: waterShift 14s ease-in-out infinite alternate;
 }
 
-/* flash overlay */
+@keyframes waterShift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 60px 80px, -40px -60px; }
+}
+
+/* ---------- LIGHT RAYS ---------- */
+
+.water-rays {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      75deg,
+      rgba(255,255,255,0.08) 0px,
+      rgba(255,255,255,0.08) 2px,
+      transparent 2px,
+      transparent 50px
+    );
+  animation: raysMove 12s linear infinite;
+}
+
+@keyframes raysMove {
+  from { transform: translateX(-60px); }
+  to { transform: translateX(60px); }
+}
+
+/* ---------- CAUSTIC SHIMMER ---------- */
+
+.caustics {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.08) 10%, transparent 11%);
+  background-size: 120px 120px;
+  animation: causticMove 8s linear infinite;
+}
+
+@keyframes causticMove {
+  from { background-position: 0 0; }
+  to { background-position: 120px 120px; }
+}
+
+/* ---------- DEPTH FOG ---------- */
+
+.fog {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(0,0,0,0) 40%,
+    rgba(0,0,0,0.35) 100%);
+}
+
+/* ---------- BUBBLES ---------- */
+
+.bubble {
+  position: fixed;
+  bottom: -40px;
+  font-size: 28px;
+  animation: rise linear forwards;
+}
+
+@keyframes rise {
+  to {
+    transform: translateY(-110vh);
+    opacity: 0;
+  }
+}
+
+/* ---------- SHADOW FISH ---------- */
+
+.shadow-fish {
+  position: fixed;
+  font-size: 70px;
+  opacity: 0.15;
+  animation: swim 20s linear infinite;
+}
+
+@keyframes swim {
+  from { left: -10%; }
+  to { left: 110%; }
+}
+
+/* ---------- SEAWEED ---------- */
+
+.seaweed {
+  position: fixed;
+  bottom: -10px;
+  font-size: 90px;
+  opacity: 0.6;
+  animation: sway 3s ease-in-out infinite alternate;
+}
+
+@keyframes sway {
+  from { transform: rotate(-6deg); }
+  to { transform: rotate(6deg); }
+}
+
+/* ---------- FISH SLAP ---------- */
+
 .flash {
   position: fixed;
   inset: 0;
@@ -22,7 +131,6 @@ body {
   pointer-events: none;
 }
 
-/* centered fish */
 .fish {
   position: fixed;
   left: 50%;
@@ -31,7 +139,6 @@ body {
   transform: translate(-50%, -50%) scale(0);
 }
 
-/* giant ripple */
 .ripple {
   position: fixed;
   left: 50%;
@@ -43,22 +150,8 @@ body {
   transform: translate(-50%, -50%);
 }
 
-/* huge bubbles */
-.bubble {
-  position: fixed;
-  bottom: -40px;
-  font-size: 30px;
-  animation: rise linear forwards;
-}
+/* ---------- UI ---------- */
 
-@keyframes rise {
-  to {
-    transform: translateY(-110vh);
-    opacity: 0;
-  }
-}
-
-/* UI */
 .ui {
   position: fixed;
   top: 0;
@@ -68,16 +161,22 @@ body {
   text-align: center;
   opacity: 0;
   transition: opacity 1.5s;
+  z-index: 9999;
 }
 
 button {
   padding: 10px 20px;
   font-size: 16px;
 }
+
 </style>
 </head>
 
 <body>
+
+<div class="water-rays"></div>
+<div class="caustics"></div>
+<div class="fog"></div>
 
 <div class="flash" id="flash"></div>
 
@@ -92,22 +191,48 @@ Return to Hunt
 <div class="fish" id="fish">🐟</div>
 
 <script>
-let fish = document.getElementById("fish");
-let flash = document.getElementById("flash");
-let ui = document.getElementById("ui");
 
-/* spawn giant bubbles */
+/* ---------- BUBBLE ENGINE ---------- */
+
 setInterval(() => {
   let b = document.createElement("div");
   b.className = "bubble";
   b.innerHTML = "🫧";
   b.style.left = Math.random()*100+"vw";
-  b.style.animationDuration = (3+Math.random()*2)+"s";
+  b.style.animationDuration = (4+Math.random()*3)+"s";
   document.body.appendChild(b);
-  setTimeout(()=>b.remove(),5000);
-}, 200);
+  setTimeout(()=>b.remove(),7000);
+}, 250);
 
-/* cinematic entrance */
+/* ---------- SHADOW FISH ENGINE ---------- */
+
+setInterval(() => {
+  let f = document.createElement("div");
+  f.className = "shadow-fish";
+  f.innerHTML = "🐟";
+  f.style.top = (30+Math.random()*50)+"vh";
+  f.style.animationDuration = (15+Math.random()*10)+"s";
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),25000);
+}, 4000);
+
+/* ---------- SEAWEED ---------- */
+
+for (let i=0;i<5;i++) {
+  let w = document.createElement("div");
+  w.className = "seaweed";
+  w.innerHTML = "🌿";
+  w.style.left = (i*20+5)+"vw";
+  w.style.animationDelay = (i*0.5)+"s";
+  document.body.appendChild(w);
+}
+
+/* ---------- FISH SLAP ---------- */
+
+let fish = document.getElementById("fish");
+let flash = document.getElementById("flash");
+let ui = document.getElementById("ui");
+
 fish.animate([
   { transform: "translate(-50%,-50%) scale(0)" },
   { transform: "translate(-50%,-50%) scale(2.5)" },
@@ -118,16 +243,13 @@ fish.animate([
   fill: "forwards"
 }).onfinish = impact;
 
-/* impact moment */
 function impact() {
 
-  /* white flash */
   flash.animate([
     { opacity: 1 },
     { opacity: 0 }
   ], { duration: 300 });
 
-  /* giant ripple */
   let r = document.createElement("div");
   r.className = "ripple";
   document.body.appendChild(r);
@@ -139,16 +261,15 @@ function impact() {
 
   setTimeout(()=>r.remove(),1000);
 
-  /* bounce fish */
   fish.animate([
     { transform: "translate(-50%,-50%) scale(1)" },
     { transform: "translate(-50%,-60%) scale(1.2)" },
     { transform: "translate(-50%,-50%) scale(1)" }
   ], { duration: 500 });
 
-  /* reveal UI */
   setTimeout(()=>ui.style.opacity=1,600);
 }
+
 </script>
 
 </body>
