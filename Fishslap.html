@@ -7,73 +7,89 @@
 
 <style>
 
-/* ---------- OCEAN BASE ---------- */
+/* ---------- PARALLAX OCEAN LAYERS ---------- */
 
 body {
   margin: 0;
   overflow: hidden;
   font-family: Arial;
-
-  background:
-    radial-gradient(circle at 50% 20%, #8edfff, #003344 70%),
-    linear-gradient(#006699, #001122);
-
-  animation: waterShift 14s ease-in-out infinite alternate;
+  background: #002233;
 }
 
-@keyframes waterShift {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: 60px 80px, -40px -60px; }
-}
-
-/* ---------- LIGHT RAYS ---------- */
-
-.water-rays {
+.layer {
   position: fixed;
   inset: 0;
   pointer-events: none;
+}
+
+.back {
+  background:
+    radial-gradient(circle at 50% 20%, #66ccff, #002233 70%);
+  animation: driftSlow 20s ease-in-out infinite alternate;
+}
+
+.mid {
   background:
     repeating-linear-gradient(
       75deg,
-      rgba(255,255,255,0.08) 0px,
-      rgba(255,255,255,0.08) 2px,
+      rgba(255,255,255,0.05) 0px,
+      rgba(255,255,255,0.05) 2px,
       transparent 2px,
-      transparent 50px
+      transparent 60px
     );
-  animation: raysMove 12s linear infinite;
+  animation: driftMid 14s linear infinite;
 }
 
-@keyframes raysMove {
-  from { transform: translateX(-60px); }
-  to { transform: translateX(60px); }
-}
-
-/* ---------- CAUSTIC SHIMMER ---------- */
-
-.caustics {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
+.front {
   background:
     radial-gradient(circle, rgba(255,255,255,0.08) 10%, transparent 11%);
-  background-size: 120px 120px;
-  animation: causticMove 8s linear infinite;
+  background-size: 140px 140px;
+  animation: driftFast 10s linear infinite;
 }
 
-@keyframes causticMove {
+@keyframes driftSlow {
+  from { transform: translateY(0); }
+  to { transform: translateY(-20px); }
+}
+
+@keyframes driftMid {
+  from { transform: translateX(-40px); }
+  to { transform: translateX(40px); }
+}
+
+@keyframes driftFast {
   from { background-position: 0 0; }
-  to { background-position: 120px 120px; }
+  to { background-position: 140px 140px; }
 }
 
-/* ---------- DEPTH FOG ---------- */
+/* ---------- JELLYFISH ---------- */
 
-.fog {
+.jelly {
   position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(to bottom,
-    rgba(0,0,0,0) 40%,
-    rgba(0,0,0,0.35) 100%);
+  font-size: 70px;
+  opacity: 0.7;
+  animation: jellyFloat linear forwards;
+}
+
+@keyframes jellyFloat {
+  to {
+    transform: translateY(-120vh);
+    opacity: 0;
+  }
+}
+
+@keyframes jellyPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- SCHOOL OF FISH ---------- */
+
+.school {
+  position: fixed;
+  font-size: 20px;
+  opacity: 0.4;
 }
 
 /* ---------- BUBBLES ---------- */
@@ -90,20 +106,6 @@ body {
     transform: translateY(-110vh);
     opacity: 0;
   }
-}
-
-/* ---------- SHADOW FISH ---------- */
-
-.shadow-fish {
-  position: fixed;
-  font-size: 70px;
-  opacity: 0.15;
-  animation: swim 20s linear infinite;
-}
-
-@keyframes swim {
-  from { left: -10%; }
-  to { left: 110%; }
 }
 
 /* ---------- SEAWEED ---------- */
@@ -128,7 +130,6 @@ body {
   inset: 0;
   background: white;
   opacity: 0;
-  pointer-events: none;
 }
 
 .fish {
@@ -174,9 +175,9 @@ button {
 
 <body>
 
-<div class="water-rays"></div>
-<div class="caustics"></div>
-<div class="fog"></div>
+<div class="layer back"></div>
+<div class="layer mid"></div>
+<div class="layer front"></div>
 
 <div class="flash" id="flash"></div>
 
@@ -192,7 +193,7 @@ Return to Hunt
 
 <script>
 
-/* ---------- BUBBLE ENGINE ---------- */
+/* ---------- BUBBLES ---------- */
 
 setInterval(() => {
   let b = document.createElement("div");
@@ -202,19 +203,57 @@ setInterval(() => {
   b.style.animationDuration = (4+Math.random()*3)+"s";
   document.body.appendChild(b);
   setTimeout(()=>b.remove(),7000);
-}, 250);
+}, 300);
 
-/* ---------- SHADOW FISH ENGINE ---------- */
+/* ---------- JELLYFISH ENGINE ---------- */
 
 setInterval(() => {
-  let f = document.createElement("div");
-  f.className = "shadow-fish";
-  f.innerHTML = "🐟";
-  f.style.top = (30+Math.random()*50)+"vh";
-  f.style.animationDuration = (15+Math.random()*10)+"s";
-  document.body.appendChild(f);
-  setTimeout(()=>f.remove(),25000);
-}, 4000);
+  let j = document.createElement("div");
+  j.className = "jelly";
+  j.innerHTML = "🪼";
+  j.style.left = Math.random()*100+"vw";
+  j.style.top = "110vh";
+  j.style.animationDuration = (10+Math.random()*6)+"s";
+  j.style.animation += ", jellyPulse 2s ease-in-out infinite";
+  document.body.appendChild(j);
+  setTimeout(()=>j.remove(),16000);
+}, 5000);
+
+/* ---------- SCHOOL OF FISH ---------- */
+
+setInterval(() => {
+
+  let group = document.createElement("div");
+  group.className = "school";
+
+  let count = 5 + Math.floor(Math.random()*5);
+
+  for (let i=0;i<count;i++) {
+    let f = document.createElement("span");
+    f.innerHTML = "🐟";
+    f.style.margin = "0 3px";
+    group.appendChild(f);
+  }
+
+  group.style.top = (30+Math.random()*50)+"vh";
+
+  let duration = 12000+Math.random()*8000;
+
+  if (Math.random()<0.5) {
+    group.style.left = "-10%";
+    group.style.transform = "scaleX(-1)";
+    group.animate([{left:"-10%"},{left:"110%"}],
+      {duration:duration,easing:"linear"});
+  } else {
+    group.style.left = "110%";
+    group.animate([{left:"110%"},{left:"-10%"}],
+      {duration:duration,easing:"linear"});
+  }
+
+  document.body.appendChild(group);
+  setTimeout(()=>group.remove(),duration+1000);
+
+}, 6000);
 
 /* ---------- SEAWEED ---------- */
 
@@ -245,27 +284,24 @@ fish.animate([
 
 function impact() {
 
-  flash.animate([
-    { opacity: 1 },
-    { opacity: 0 }
-  ], { duration: 300 });
+  flash.animate([{opacity:1},{opacity:0}],{duration:300});
 
-  let r = document.createElement("div");
-  r.className = "ripple";
+  let r=document.createElement("div");
+  r.className="ripple";
   document.body.appendChild(r);
 
   r.animate([
-    { width: "40px", height: "40px", opacity: 1 },
-    { width: "800px", height: "800px", opacity: 0 }
-  ], { duration: 1000 });
+    {width:"40px",height:"40px",opacity:1},
+    {width:"800px",height:"800px",opacity:0}
+  ],{duration:1000});
 
   setTimeout(()=>r.remove(),1000);
 
   fish.animate([
-    { transform: "translate(-50%,-50%) scale(1)" },
-    { transform: "translate(-50%,-60%) scale(1.2)" },
-    { transform: "translate(-50%,-50%) scale(1)" }
-  ], { duration: 500 });
+    {transform:"translate(-50%,-50%) scale(1)"},
+    {transform:"translate(-50%,-60%) scale(1.2)"},
+    {transform:"translate(-50%,-50%) scale(1)"}
+  ],{duration:500});
 
   setTimeout(()=>ui.style.opacity=1,600);
 }
