@@ -218,6 +218,60 @@ body{
   75%{ transform:translateY(-10px) scaleX(.8);}
   100%{ transform:translateY(0) scaleX(1);}
 }
+/* PIXEL BUTTERFLIES */
+.butterfly{
+  position:absolute;
+  width:16px;
+  height:12px;
+  z-index:4;
+  animation: flutter 6s linear infinite;
+}
+
+/* wings */
+.butterfly::before,
+.butterfly::after{
+  content:"";
+  position:absolute;
+  width:8px;
+  height:8px;
+  top:2px;
+  animation: flap .4s infinite alternate;
+}
+
+.butterfly::before{
+  left:0;
+}
+
+.butterfly::after{
+  right:0;
+}
+
+/* pink butterfly */
+.butterfly.pink::before,
+.butterfly.pink::after{
+  background:#ff69b4;
+}
+
+/* blue butterfly */
+.butterfly.blue::before,
+.butterfly.blue::after{
+  background:#87cefa;
+}
+
+/* wing flap */
+@keyframes flap{
+  from{ transform:scaleY(1); }
+  to{ transform:scaleY(.5); }
+}
+
+/* floating path */
+@keyframes flutter{
+  0%{ transform:translateX(0) translateY(0); }
+  25%{ transform:translateX(40px) translateY(-20px); }
+  50%{ transform:translateX(80px) translateY(0); }
+  75%{ transform:translateX(120px) translateY(-15px); }
+  100%{ transform:translateX(160px) translateY(0); }
+}
 
 /* BUNNY */
 .bunny{
@@ -383,3 +437,4 @@ body::after{
 
 </body>
 </html>
+
