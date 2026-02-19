@@ -15,9 +15,8 @@
   --sun:#fff6b3;
 
   --ink:#2b2b2b;
-  --card:#ffffffd9;
-  --border:#ffffffa6;
-  --shadow: 0 25px 60px rgba(0,0,0,.12);
+  --card:#ffffffea;
+  --shadow: 0 30px 70px rgba(0,0,0,.18);
 }
 
 *{ box-sizing: border-box; }
@@ -37,20 +36,6 @@ body{
     linear-gradient(135deg, var(--pink), var(--peach));
 }
 
-/* subtle egg-dots pattern overlay */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.25;
-  background-image:
-    radial-gradient(circle at 12px 16px, rgba(255,255,255,.85) 0 4px, transparent 5px),
-    radial-gradient(circle at 24px 34px, rgba(255,255,255,.7) 0 3px, transparent 4px),
-    radial-gradient(circle at 40px 18px, rgba(255,255,255,.6) 0 2px, transparent 3px);
-  background-size: 64px 64px;
-}
-
 /* Wrapper */
 .wrap{
   min-height:100%;
@@ -61,37 +46,60 @@ body::before{
   z-index:2;
 }
 
-/* Decorative egg — completely separate from card */
+/* Base egg style */
 .egg{
   position: fixed;
-  top: 6%;
-  right: 6%;
   width: 220px;
   height: 260px;
   border-radius: 50% 50% 48% 48% / 58% 58% 42% 42%;
   background:
-    radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), transparent 45%),
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), transparent 45%),
     linear-gradient(135deg, #fff6b3, #ffd6e7, #d7ecff);
-  border: 2px solid rgba(255,255,255,.8);
-  box-shadow: 0 18px 50px rgba(0,0,0,.10);
-  transform: rotate(18deg);
-  z-index:1;
-  opacity:.55;
+  border: 8px solid #ffffff; /* THICK BORDER */
+  box-shadow:
+    0 25px 60px rgba(0,0,0,.25),
+    inset 0 0 25px rgba(255,255,255,.4);
   pointer-events:none;
+  opacity:.95;
+  z-index:1;
+}
+
+/* Corner positions */
+.top-left{
+  top: 5%;
+  left: 4%;
+  transform: rotate(-15deg);
+}
+
+.top-right{
+  top: 5%;
+  right: 4%;
+  transform: rotate(18deg);
+}
+
+.bottom-left{
+  bottom: 5%;
+  left: 4%;
+  transform: rotate(12deg);
+}
+
+.bottom-right{
+  bottom: 5%;
+  right: 4%;
+  transform: rotate(-20deg);
 }
 
 /* Card */
 .card{
   width:min(760px, 92vw);
   background: var(--card);
-  border: 1px solid var(--border);
   border-radius: 22px;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   padding: 40px 30px;
   text-align:center;
   position:relative;
-  z-index:5; /* Always above egg */
+  z-index:5;
 }
 
 h1{
@@ -100,11 +108,10 @@ h1{
   line-height:1.2;
 }
 
-/* Golden highlight word */
 .word{
   display:inline-block;
   margin-top: 12px;
-  padding: 12px 20px;
+  padding: 12px 22px;
   border-radius: 14px;
   font-weight: 800;
   font-size: clamp(20px, 2.5vw, 24px);
@@ -112,11 +119,10 @@ h1{
   background: linear-gradient(90deg,#ffd700,#ffed8a,#ffd700);
   background-size: 200% auto;
   color: #5a4a00;
-  box-shadow: 0 5px 20px rgba(255,215,0,.4);
+  box-shadow: 0 6px 25px rgba(255,215,0,.5);
   animation: shimmer 4s linear infinite;
 }
 
-/* subtle shimmer */
 @keyframes shimmer{
   to{ background-position: 200% center; }
 }
@@ -124,18 +130,23 @@ h1{
 .footer{
   margin-top: 20px;
   font-size: 14px;
-  opacity:.7;
+  opacity:.75;
 }
 
-/* Optional floating animation */
+/* Subtle float */
 @media (prefers-reduced-motion: no-preference){
   .egg{
-    animation: floaty 5s ease-in-out infinite;
+    animation: floaty 6s ease-in-out infinite;
   }
   @keyframes floaty{
-    0%,100%{ transform: translateY(0) rotate(18deg); }
-    50%{ transform: translateY(10px) rotate(18deg); }
+    0%,100%{ transform: translateY(0) rotate(var(--rot,0deg)); }
+    50%{ transform: translateY(12px) rotate(var(--rot,0deg)); }
   }
+
+  .top-left{ --rot:-15deg; }
+  .top-right{ --rot:18deg; }
+  .bottom-left{ --rot:12deg; }
+  .bottom-right{ --rot:-20deg; }
 }
 
 </style>
@@ -143,11 +154,15 @@ h1{
 
 <body>
 
-<div class="egg" aria-hidden="true"></div>
+<!-- Four Corner Eggs -->
+<div class="egg top-left"></div>
+<div class="egg top-right"></div>
+<div class="egg bottom-left"></div>
+<div class="egg bottom-right"></div>
 
 <div class="wrap">
   <main class="card" role="main">
-      <h1>You have found piece 1/5 of the Golden Easter Egg!</h1>
+      <h1>You have found piece 1/5 of the golden Easter Egg!</h1>
       <p>Your special word is:</p>
       <div class="word">Egg</div>
       <div class="footer">🐣 Keep going… 4 pieces left.</div>
@@ -156,4 +171,3 @@ h1{
 
 </body>
 </html>
-
