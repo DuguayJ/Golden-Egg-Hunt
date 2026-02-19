@@ -1,33 +1,146 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>You Found an Egg!</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Golden Easter Egg — Piece 2</title>
 
 <style>
-body {
-  font-family: Arial;
-  text-align: center;
-  padding: 50px;
+:root{
+  --pink:#ffd6e7;
+  --mint:#d9fff1;
+  --sky:#d7ecff;
+  --lav:#eadcff;
+  --peach:#ffe6c7;
 }
-.word {
-  font-size: 40px;
-  font-weight: bold;
-  margin-top: 20px;
-}
-</style>
 
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+
+  /* Pastel stripe background */
+  background: repeating-linear-gradient(
+    45deg,
+    var(--pink),
+    var(--pink) 120px,
+    var(--mint) 120px,
+    var(--mint) 240px,
+    var(--sky) 240px,
+    var(--sky) 360px,
+    var(--lav) 360px,
+    var(--lav) 480px,
+    var(--peach) 480px,
+    var(--peach) 600px
+  );
+}
+
+/* Floating decorative mini eggs */
+.mini-egg{
+  position:absolute;
+  width:90px;
+  height:110px;
+  border-radius: 50% 50% 48% 48% / 58% 58% 42% 42%;
+  border:5px solid white;
+  box-shadow:0 15px 35px rgba(0,0,0,.2);
+  animation: float 8s ease-in-out infinite;
+}
+
+.mini-egg:nth-child(1){
+  top:8%;
+  left:10%;
+  background:linear-gradient(135deg,#fff6b3,#ffd6e7);
+  transform:rotate(-15deg);
+}
+
+.mini-egg:nth-child(2){
+  bottom:10%;
+  right:12%;
+  background:linear-gradient(135deg,#d7ecff,#eadcff);
+  transform:rotate(18deg);
+  animation-delay:2s;
+}
+
+.mini-egg:nth-child(3){
+  bottom:15%;
+  left:15%;
+  background:linear-gradient(135deg,#ffe6c7,#d9fff1);
+  transform:rotate(8deg);
+  animation-delay:4s;
+}
+
+@keyframes float{
+  0%,100%{ transform: translateY(0) rotate(var(--rot,0deg)); }
+  50%{ transform: translateY(15px) rotate(var(--rot,0deg)); }
+}
+
+/* Main badge card */
+.card{
+  background: rgba(255,255,255,.95);
+  padding:50px 40px;
+  border-radius:30px;
+  text-align:center;
+  box-shadow: 0 40px 80px rgba(0,0,0,.25);
+  backdrop-filter: blur(10px);
+  max-width:700px;
+}
+
+h1{
+  margin:0 0 15px;
+  font-size: clamp(28px,3vw,36px);
+}
+
+.subtitle{
+  font-size:18px;
+  margin-bottom:20px;
+}
+
+/* Golden word badge */
+.word{
+  display:inline-block;
+  padding:15px 30px;
+  border-radius:50px;
+  font-weight:900;
+  font-size:28px;
+  letter-spacing:3px;
+  background: linear-gradient(90deg,#ffd700,#fff2a8,#ffd700);
+  background-size:200% auto;
+  color:#5a4a00;
+  box-shadow:0 8px 30px rgba(255,215,0,.5);
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer{
+  to{ background-position:200% center; }
+}
+
+.footer{
+  margin-top:25px;
+  font-size:14px;
+  opacity:.75;
+}
+
+</style>
 </head>
 
 <body>
 
-<h1>🥚 You found a hidden egg!</h1>
+<div class="mini-egg"></div>
+<div class="mini-egg"></div>
+<div class="mini-egg"></div>
 
-<p>Your word is:</p>
-
-<div class="word">HIDDEN</div>
-
-<p>Collect all 5 words to unlock the Golden Egg.</p>
+<div class="card">
+  <h1>You have found piece 2/5 of the golden Easter Egg!</h1>
+  <div class="subtitle">Your special word is:</div>
+  <div class="word">NDH</div>
+  <div class="footer">🐣 3 pieces remain… keep hunting.</div>
+</div>
 
 </body>
 </html>
