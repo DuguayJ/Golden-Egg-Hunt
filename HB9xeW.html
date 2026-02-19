@@ -1,33 +1,139 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>You Found an Egg!</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Golden Easter Egg — Piece 4</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-body {
-  font-family: Arial;
-  text-align: center;
-  padding: 50px;
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+
+body{
+  font-family:'Quicksand', sans-serif;
+  background:radial-gradient(circle at top, #2a2f5a 0%, #12142a 60%);
+  overflow:hidden;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
 }
-.word {
-  font-size: 40px;
-  font-weight: bold;
-  margin-top: 20px;
+
+/* Floating light particles */
+.particle{
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:rgba(255,255,255,.6);
+  border-radius:50%;
+  animation: float 12s linear infinite;
+}
+
+@keyframes float{
+  0%{ transform:translateY(100vh); opacity:0;}
+  20%{ opacity:1;}
+  100%{ transform:translateY(-10vh); opacity:0;}
+}
+
+/* Glow egg altar */
+.altar{
+  position:absolute;
+  bottom:120px;
+  width:260px;
+  height:120px;
+  background:linear-gradient(#3a3f7a,#1d1f3f);
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,.6);
+}
+
+/* Golden egg */
+.egg{
+  position:absolute;
+  bottom:200px;
+  width:140px;
+  height:180px;
+  border-radius:50% 50% 45% 45% / 60% 60% 40% 40%;
+  background:linear-gradient(135deg,#ffd700,#ffea70);
+  box-shadow:
+    0 0 40px rgba(255,215,0,.6),
+    0 0 80px rgba(255,215,0,.3);
+  animation: glowPulse 3s infinite alternate;
+}
+
+@keyframes glowPulse{
+  from{ box-shadow:0 0 30px rgba(255,215,0,.4);}
+  to{ box-shadow:0 0 70px rgba(255,215,0,.8);}
+}
+
+/* Card */
+.card{
+  position:relative;
+  z-index:5;
+  background:white;
+  color:#222;
+  padding:60px 70px;
+  border-radius:20px;
+  box-shadow:0 25px 60px rgba(0,0,0,.6);
+  text-align:center;
+  max-width:650px;
+}
+
+.level{
+  font-weight:700;
+  letter-spacing:2px;
+  margin-bottom:20px;
+  color:#555;
+}
+
+h1{
+  font-size:28px;
+  margin-bottom:25px;
+}
+
+.subtitle{
+  font-size:16px;
+  margin-bottom:30px;
+}
+
+.word{
+  display:inline-block;
+  padding:18px 40px;
+  background:linear-gradient(135deg,#ffd700,#ffea70);
+  border-radius:50px;
+  font-size:24px;
+  font-weight:700;
+  box-shadow:0 10px 25px rgba(255,215,0,.5);
+}
+
+.footer{
+  margin-top:35px;
+  font-size:14px;
+  color:#777;
 }
 </style>
-
 </head>
 
 <body>
 
-<h1>🥚 You found a hidden egg!</h1>
+<!-- Floating particles -->
+<div class="particle" style="left:10%; animation-duration:10s;"></div>
+<div class="particle" style="left:30%; animation-duration:14s;"></div>
+<div class="particle" style="left:60%; animation-duration:12s;"></div>
+<div class="particle" style="left:80%; animation-duration:18s;"></div>
 
-<p>Your word is:</p>
+<div class="altar"></div>
+<div class="egg"></div>
 
-<div class="word">QUEST</div>
-
-<p>Collect all 5 words to unlock the Golden Egg.</p>
+<div class="card">
+  <div class="level">PIECE 4 / 5</div>
+  <h1>You have discovered another fragment of the Golden Easter Egg!</h1>
+  <div class="subtitle">Your special word is:</div>
+  <div class="word">Temple</div>
+  <div class="footer">Only 1 piece remains...</div>
+</div>
 
 </body>
 </html>
