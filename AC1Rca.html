@@ -15,118 +15,125 @@ body{
   align-items:center;
   justify-content:center;
   overflow:hidden;
-  background: radial-gradient(circle at 50% 20%, #fff6b3 0%, #ffd6e7 25%, #d7ecff 55%, #eadcff 100%);
-  perspective:1200px;
+  position:relative;
+
+  /* Sky gradient with realistic falloff */
+  background:
+    radial-gradient(circle at 50% 15%, #fff4b5 0%, #ffd6e7 20%, #d6e8ff 55%, #c8d6f2 100%);
 }
 
-/* Floating clouds */
+/* Subtle atmospheric haze */
+body::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom, rgba(255,255,255,.15), rgba(0,0,0,.08));
+  pointer-events:none;
+}
+
+/* Realistic clouds */
 .cloud{
   position:absolute;
-  width:200px;
-  height:60px;
-  background:white;
-  border-radius:50px;
-  opacity:.4;
-  filter:blur(4px);
-  animation: drift 30s linear infinite;
+  width:260px;
+  height:90px;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(255,255,255,.9) 0%, rgba(255,255,255,.6) 60%, transparent 70%),
+    radial-gradient(circle at 50% 40%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.7) 65%, transparent 75%),
+    radial-gradient(circle at 75% 55%, rgba(255,255,255,.85) 0%, rgba(255,255,255,.6) 60%, transparent 70%);
+  filter:blur(6px);
+  opacity:.8;
+  animation: drift 60s linear infinite;
 }
 
-.cloud:nth-child(1){ top:15%; left:-200px; }
-.cloud:nth-child(2){ top:35%; left:-300px; animation-delay:10s; }
+.cloud.one{ top:12%; left:-300px; }
+.cloud.two{ top:30%; left:-400px; animation-delay:25s; }
 
 @keyframes drift{
-  0%{ transform:translateX(0); }
-  100%{ transform:translateX(150vw); }
+  from{ transform:translateX(0); }
+  to{ transform:translateX(160vw); }
 }
 
-/* Decorative eggs with 3D float */
-.egg{
+/* Layered rolling hills */
+.hill-back{
   position:absolute;
-  width:90px;
-  height:110px;
-  border-radius:50% 50% 48% 48% / 58% 58% 42% 42%;
-  border:6px solid white;
-  box-shadow:0 20px 40px rgba(0,0,0,.25);
-  animation: float 6s ease-in-out infinite;
-  transform-style:preserve-3d;
+  bottom:120px;
+  width:120%;
+  height:220px;
+  left:-10%;
+  background:
+    radial-gradient(circle at 30% 100%, #79d497 40%, transparent 41%),
+    radial-gradient(circle at 75% 100%, #6bc98a 45%, transparent 46%),
+    linear-gradient(#79d497,#6bc98a);
+  opacity:.7;
 }
 
-.egg.left{
-  top:20%;
-  left:8%;
-  background:linear-gradient(135deg,#ffd6e7,#fff6b3);
-}
-
-.egg.right{
-  top:25%;
-  right:10%;
-  background:linear-gradient(135deg,#d7ecff,#eadcff);
-  animation-delay:2s;
-}
-
-@keyframes float{
-  0%,100%{ transform:translateY(0) rotateY(0deg); }
-  50%{ transform:translateY(20px) rotateY(15deg); }
-}
-
-/* Hills */
-.hill{
+.hill-front{
   position:absolute;
   bottom:0;
-  width:100%;
-  height:220px;
+  width:120%;
+  height:260px;
+  left:-10%;
   background:
-    radial-gradient(circle at 30% 100%, #6ecf8d 45%, transparent 46%),
-    radial-gradient(circle at 75% 100%, #4fb87c 55%, transparent 56%),
-    linear-gradient(#6ecf8d,#4fb87c);
+    radial-gradient(circle at 20% 100%, #63c484 50%, transparent 51%),
+    radial-gradient(circle at 75% 100%, #54b774 55%, transparent 56%),
+    linear-gradient(#63c484,#54b774);
+  box-shadow: inset 0 30px 60px rgba(0,0,0,.1);
 }
 
-/* Bunny */
+/* Grass texture overlay */
+.hill-front::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.04) 0px,
+      rgba(255,255,255,.04) 2px,
+      transparent 2px,
+      transparent 6px
+    );
+  opacity:.4;
+}
+
+/* Bunny silhouette refined */
 .bunny{
   position:absolute;
-  bottom:150px;
+  bottom:170px;
   left:50%;
-  transform:translateX(-50%) translateY(20px);
+  transform:translateX(-50%);
   width:70px;
   height:70px;
-  background:#4fb87c;
+  background:#3da466;
   border-radius:50%;
-  transition:.5s ease;
+  box-shadow:0 10px 20px rgba(0,0,0,.2);
 }
 
 .bunny::before,
 .bunny::after{
   content:"";
   position:absolute;
-  width:20px;
-  height:50px;
-  background:#4fb87c;
+  width:22px;
+  height:55px;
+  background:#3da466;
   border-radius:50%;
-  top:-45px;
+  top:-50px;
 }
 
-.bunny::before{ left:8px; }
-.bunny::after{ right:8px; }
+.bunny::before{ left:10px; }
+.bunny::after{ right:10px; }
 
 /* Card */
 .card{
-  background: rgba(255,255,255,.96);
+  background: rgba(255,255,255,.97);
   padding:70px 60px;
-  border-radius:25px;
+  border-radius:24px;
   text-align:center;
-  box-shadow: 0 60px 150px rgba(0,0,0,.4);
+  box-shadow: 0 60px 140px rgba(0,0,0,.25);
   max-width:760px;
   position:relative;
   z-index:10;
-  transition:.4s ease;
-}
-
-.card:hover{
-  transform:translateY(-8px) rotateX(3deg);
-}
-
-.card:hover ~ .bunny{
-  transform:translateX(-50%) translateY(-10px);
+  backdrop-filter: blur(6px);
 }
 
 h1{
@@ -137,9 +144,10 @@ h1{
 .subtitle{
   font-size:18px;
   margin-bottom:20px;
+  opacity:.8;
 }
 
-/* Gold word */
+/* Refined gold word */
 .word{
   display:inline-block;
   padding:20px 45px;
@@ -150,30 +158,12 @@ h1{
   background: linear-gradient(90deg,#ffd700,#fff3a6,#ffd700);
   background-size:200% auto;
   color:#5a4a00;
-  box-shadow:0 15px 45px rgba(255,215,0,.7);
-  animation: shimmer 3s linear infinite;
-  position:relative;
-  cursor:pointer;
+  box-shadow:0 15px 45px rgba(255,215,0,.5);
+  animation: shimmer 4s linear infinite;
 }
 
 @keyframes shimmer{
   to{ background-position:200% center; }
-}
-
-/* Confetti burst */
-.word:active::after{
-  content:"🎉🎉🎉";
-  position:absolute;
-  top:-40px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:24px;
-  animation: pop .6s ease-out forwards;
-}
-
-@keyframes pop{
-  0%{ opacity:1; transform:translateX(-50%) scale(.5); }
-  100%{ opacity:0; transform:translateX(-50%) scale(1.5); }
 }
 
 .footer{
@@ -187,14 +177,12 @@ h1{
 
 <body>
 
-<div class="cloud"></div>
-<div class="cloud"></div>
+<div class="cloud one"></div>
+<div class="cloud two"></div>
 
-<div class="egg left"></div>
-<div class="egg right"></div>
-
-<div class="hill"></div>
-<div class="bunny" onclick="alert('🐰 You found the hidden bunny!')"></div>
+<div class="hill-back"></div>
+<div class="hill-front"></div>
+<div class="bunny"></div>
 
 <div class="card">
   <h1>You have found piece 3/5 of the golden Easter Egg!</h1>
