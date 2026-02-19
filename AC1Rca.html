@@ -5,160 +5,109 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Golden Easter Egg — Piece 3</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
 <style>
 *{ box-sizing:border-box; }
 html,body{ height:100%; margin:0; }
 
 body{
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  font-family: 'Inter', system-ui, sans-serif;
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
   position:relative;
 
-  /* Sky gradient with realistic falloff */
-  background:
-    radial-gradient(circle at 50% 15%, #fff4b5 0%, #ffd6e7 20%, #d6e8ff 55%, #c8d6f2 100%);
+  /* Premium soft gradient */
+  background: linear-gradient(
+    135deg,
+    #f6e6ff 0%,
+    #e8f3ff 40%,
+    #fff3c4 100%
+  );
 }
 
-/* Subtle atmospheric haze */
+/* Subtle noise overlay */
 body::after{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(to bottom, rgba(255,255,255,.15), rgba(0,0,0,.08));
+  background-image: radial-gradient(rgba(0,0,0,.02) 1px, transparent 1px);
+  background-size: 3px 3px;
   pointer-events:none;
 }
 
-/* Realistic clouds */
-.cloud{
+/* Decorative floating eggs */
+.egg{
   position:absolute;
-  width:260px;
-  height:90px;
-  background:
-    radial-gradient(circle at 20% 50%, rgba(255,255,255,.9) 0%, rgba(255,255,255,.6) 60%, transparent 70%),
-    radial-gradient(circle at 50% 40%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.7) 65%, transparent 75%),
-    radial-gradient(circle at 75% 55%, rgba(255,255,255,.85) 0%, rgba(255,255,255,.6) 60%, transparent 70%);
-  filter:blur(6px);
-  opacity:.8;
-  animation: drift 60s linear infinite;
+  width:110px;
+  height:140px;
+  border-radius:50% 50% 48% 48% / 58% 58% 42% 42%;
+  box-shadow:0 20px 60px rgba(0,0,0,.15);
+  opacity:.85;
+  animation: float 8s ease-in-out infinite;
 }
 
-.cloud.one{ top:12%; left:-300px; }
-.cloud.two{ top:30%; left:-400px; animation-delay:25s; }
-
-@keyframes drift{
-  from{ transform:translateX(0); }
-  to{ transform:translateX(160vw); }
+.egg.left{
+  top:18%;
+  left:12%;
+  background: linear-gradient(135deg,#ffd6e7,#fff2b3);
 }
 
-/* Layered rolling hills */
-.hill-back{
-  position:absolute;
-  bottom:120px;
-  width:120%;
-  height:220px;
-  left:-10%;
-  background:
-    radial-gradient(circle at 30% 100%, #79d497 40%, transparent 41%),
-    radial-gradient(circle at 75% 100%, #6bc98a 45%, transparent 46%),
-    linear-gradient(#79d497,#6bc98a);
-  opacity:.7;
+.egg.right{
+  bottom:20%;
+  right:15%;
+  background: linear-gradient(135deg,#d6ecff,#eadcff);
+  animation-delay:2s;
 }
 
-.hill-front{
-  position:absolute;
-  bottom:0;
-  width:120%;
-  height:260px;
-  left:-10%;
-  background:
-    radial-gradient(circle at 20% 100%, #63c484 50%, transparent 51%),
-    radial-gradient(circle at 75% 100%, #54b774 55%, transparent 56%),
-    linear-gradient(#63c484,#54b774);
-  box-shadow: inset 0 30px 60px rgba(0,0,0,.1);
+@keyframes float{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(18px); }
 }
 
-/* Grass texture overlay */
-.hill-front::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255,255,255,.04) 0px,
-      rgba(255,255,255,.04) 2px,
-      transparent 2px,
-      transparent 6px
-    );
-  opacity:.4;
-}
-
-/* Bunny silhouette refined */
-.bunny{
-  position:absolute;
-  bottom:170px;
-  left:50%;
-  transform:translateX(-50%);
-  width:70px;
-  height:70px;
-  background:#3da466;
-  border-radius:50%;
-  box-shadow:0 10px 20px rgba(0,0,0,.2);
-}
-
-.bunny::before,
-.bunny::after{
-  content:"";
-  position:absolute;
-  width:22px;
-  height:55px;
-  background:#3da466;
-  border-radius:50%;
-  top:-50px;
-}
-
-.bunny::before{ left:10px; }
-.bunny::after{ right:10px; }
-
-/* Card */
+/* Glass card */
 .card{
-  background: rgba(255,255,255,.97);
+  width:min(720px,90%);
   padding:70px 60px;
-  border-radius:24px;
+  border-radius:28px;
   text-align:center;
-  box-shadow: 0 60px 140px rgba(0,0,0,.25);
-  max-width:760px;
   position:relative;
-  z-index:10;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(18px);
+  background: rgba(255,255,255,.65);
+  box-shadow:
+    0 40px 120px rgba(0,0,0,.15),
+    inset 0 1px 0 rgba(255,255,255,.6);
 }
 
 h1{
   margin:0 0 20px;
   font-size: clamp(28px,3vw,36px);
+  font-weight:800;
+  color:#1f1f1f;
 }
 
 .subtitle{
-  font-size:18px;
-  margin-bottom:20px;
-  opacity:.8;
+  font-size:16px;
+  opacity:.7;
+  margin-bottom:25px;
 }
 
-/* Refined gold word */
+/* Elegant gold badge */
 .word{
   display:inline-block;
-  padding:20px 45px;
-  border-radius:60px;
-  font-weight:900;
-  font-size:34px;
+  padding:18px 50px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:30px;
   letter-spacing:3px;
   background: linear-gradient(90deg,#ffd700,#fff3a6,#ffd700);
   background-size:200% auto;
   color:#5a4a00;
-  box-shadow:0 15px 45px rgba(255,215,0,.5);
+  box-shadow:
+    0 10px 30px rgba(255,215,0,.4),
+    inset 0 2px 6px rgba(255,255,255,.6);
   animation: shimmer 4s linear infinite;
 }
 
@@ -167,9 +116,9 @@ h1{
 }
 
 .footer{
-  margin-top:25px;
+  margin-top:30px;
   font-size:14px;
-  opacity:.75;
+  opacity:.6;
 }
 
 </style>
@@ -177,12 +126,8 @@ h1{
 
 <body>
 
-<div class="cloud one"></div>
-<div class="cloud two"></div>
-
-<div class="hill-back"></div>
-<div class="hill-front"></div>
-<div class="bunny"></div>
+<div class="egg left"></div>
+<div class="egg right"></div>
 
 <div class="card">
   <h1>You have found piece 3/5 of the golden Easter Egg!</h1>
