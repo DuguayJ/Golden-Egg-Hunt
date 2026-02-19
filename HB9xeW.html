@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Golden Easter Egg — Piece 4</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box;}
@@ -14,201 +14,242 @@ html,body{height:100%;margin:0;}
 body{
   font-family:'Inter', sans-serif;
   overflow:hidden;
-  background:#1c1b22;
+  background:#04060d;
   color:white;
   position:relative;
 }
 
-/* STONE WALL */
-.wall{
+/* SKY */
+.sky{
   position:absolute;
   inset:0;
+  background:radial-gradient(circle at 50% 20%, #0a1b2a 0%, #04060d 70%);
+}
+
+/* STARS */
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  opacity:.8;
+  animation: twinkle 3s infinite alternate;
+}
+@keyframes twinkle{
+  from{opacity:.3;}
+  to{opacity:1;}
+}
+
+/* DRAMATIC AURORA */
+.aurora{
+  position:absolute;
+  top:0;
+  width:200%;
+  height:60%;
   background:
-    linear-gradient(#2a2933,#1c1b22),
-    repeating-linear-gradient(
-      0deg,
-      rgba(0,0,0,.15) 0px,
-      rgba(0,0,0,.15) 2px,
-      transparent 2px,
-      transparent 60px
-    ),
+    linear-gradient(120deg,
+      transparent 10%,
+      rgba(0,255,140,.6) 30%,
+      rgba(0,200,255,.5) 45%,
+      rgba(255,0,120,.4) 60%,
+      transparent 80%
+    );
+  filter:blur(80px);
+  opacity:.8;
+  animation: auroraFlow 18s ease-in-out infinite alternate;
+}
+
+@keyframes auroraFlow{
+  0%{transform:translateX(-10%) skewX(-10deg);}
+  100%{transform:translateX(10%) skewX(10deg);}
+}
+
+/* TREE LINE */
+.trees{
+  position:absolute;
+  bottom:200px;
+  width:100%;
+  height:180px;
+  background:
     repeating-linear-gradient(
       90deg,
-      rgba(0,0,0,.15) 0px,
-      rgba(0,0,0,.15) 2px,
-      transparent 2px,
-      transparent 80px
+      transparent 0 60px,
+      #0b111a 60px 120px
     );
+  clip-path:polygon(
+    0% 100%, 5% 60%, 10% 100%,
+    15% 50%, 20% 100%,
+    25% 65%, 30% 100%,
+    35% 55%, 40% 100%,
+    45% 60%, 50% 100%,
+    55% 50%, 60% 100%,
+    65% 65%, 70% 100%,
+    75% 55%, 80% 100%,
+    85% 60%, 90% 100%,
+    95% 50%, 100% 100%
+  );
 }
 
-/* TEMPLE ARCH */
-.arch{
-  position:absolute;
-  bottom:180px;
-  left:50%;
-  transform:translateX(-50%);
-  width:600px;
-  height:350px;
-  border-radius:300px 300px 0 0;
-  background:linear-gradient(#1a1920,#0f0e14);
-  box-shadow:inset 0 0 80px rgba(0,0,0,.8);
-}
-
-/* TORCH GLOW (Left & Right) */
-.torch{
-  position:absolute;
-  width:120px;
-  height:200px;
-  background:radial-gradient(circle,
-    rgba(255,140,0,.4),
-    transparent 70%);
-  top:35%;
-  animation:flicker 4s infinite alternate;
-}
-
-.torch.left{ left:10%; }
-.torch.right{ right:10%; }
-
-@keyframes flicker{
-  0%{opacity:.8;}
-  50%{opacity:1;}
-  100%{opacity:.85;}
-}
-
-/* FLOOR */
-.floor{
+/* SNOW GROUND */
+.ground{
   position:absolute;
   bottom:0;
   width:100%;
-  height:160px;
-  background:linear-gradient(#1a1a1f,#111116);
-  box-shadow:inset 0 10px 40px rgba(0,0,0,.8);
+  height:200px;
+  background:linear-gradient(#e6edf4,#cfd8e3);
 }
 
-/* PEDESTAL */
-.pedestal{
+/* TENT */
+.tent{
+  position:absolute;
+  bottom:160px;
+  left:15%;
+  width:0;
+  height:0;
+  border-left:80px solid transparent;
+  border-right:80px solid transparent;
+  border-bottom:120px solid #1b2433;
+}
+
+/* CAMPFIRE LOGS */
+.log{
   position:absolute;
   bottom:140px;
   left:50%;
-  transform:translateX(-50%);
-  width:280px;
-  height:120px;
-  background:linear-gradient(#444453,#2a2a35);
-  border-radius:8px;
-  box-shadow:0 30px 60px rgba(0,0,0,.8);
+  width:80px;
+  height:12px;
+  background:#4a2f1a;
+  transform:translateX(-50%) rotate(12deg);
+}
+.log.two{
+  transform:translateX(-50%) rotate(-12deg);
 }
 
-/* EGG */
-.egg{
+/* REALISTIC FIRE */
+.fire{
   position:absolute;
-  bottom:250px;
+  bottom:150px;
   left:50%;
   transform:translateX(-50%);
-  width:150px;
-  height:190px;
+  width:40px;
+  height:60px;
+}
+
+.flame{
+  position:absolute;
+  bottom:0;
+  width:20px;
+  height:40px;
+  background:linear-gradient(to top,#ff5500,#ffdd55);
+  border-radius:50% 50% 40% 40%;
+  animation: flameFlicker .5s infinite alternate;
+}
+
+.flame.one{ left:10px; }
+.flame.two{ left:0; height:35px; animation-delay:.2s;}
+.flame.three{ left:20px; height:30px; animation-delay:.3s;}
+
+@keyframes flameFlicker{
+  from{transform:scaleY(1);}
+  to{transform:scaleY(1.3);}
+}
+
+/* ROTATING GOLDEN EGG */
+.egg{
+  position:absolute;
+  bottom:220px;
+  left:50%;
+  width:110px;
+  height:140px;
   border-radius:50% 50% 45% 45% / 60% 60% 40% 40%;
   background:linear-gradient(135deg,#ffd700,#fff18a);
   box-shadow:
-    0 0 50px rgba(255,215,0,.6),
-    0 0 120px rgba(255,215,0,.4);
-  animation:pulse 3s ease-in-out infinite;
+    0 0 40px rgba(255,215,0,.9),
+    0 0 80px rgba(255,215,0,.4);
+  animation: eggRotate 6s infinite linear;
 }
 
-@keyframes pulse{
-  0%{transform:translateX(-50%) scale(1);}
-  50%{transform:translateX(-50%) scale(1.04);}
-  100%{transform:translateX(-50%) scale(1);}
-}
-
-/* EGG FLOOR GLOW */
-.egg::after{
-  content:"";
-  position:absolute;
-  bottom:-40px;
-  left:50%;
-  transform:translateX(-50%);
-  width:220px;
-  height:100px;
-  background:radial-gradient(circle,
-    rgba(255,215,0,.25),
-    transparent 70%);
-  border-radius:50%;
+@keyframes eggRotate{
+  0%{transform:translateX(-50%) rotateY(0deg);}
+  100%{transform:translateX(-50%) rotateY(360deg);}
 }
 
 /* TEXT */
 .text{
   position:absolute;
-  top:80px;
+  top:60px;
   width:100%;
   text-align:center;
 }
 
-.text .level{
-  font-family:'Cinzel', serif;
-  letter-spacing:4px;
-  font-size:18px;
+.level{
+  letter-spacing:3px;
+  font-size:16px;
   opacity:.7;
 }
 
-.text h1{
-  font-family:'Cinzel', serif;
-  font-size:36px;
+h1{
+  font-size:34px;
   margin:20px 0;
 }
 
-.text .subtitle{
+.subtitle{
   font-size:18px;
-  opacity:.8;
 }
 
 .word{
-  margin-top:20px;
   display:inline-block;
+  margin-top:20px;
   padding:14px 40px;
   font-size:28px;
-  border-radius:50px;
+  border-radius:40px;
   background:linear-gradient(135deg,#ffd700,#fff18a);
-  box-shadow:0 10px 30px rgba(255,215,0,.6);
   color:#222;
+  box-shadow:0 10px 30px rgba(255,215,0,.6);
 }
 
 .footer{
   margin-top:20px;
-  font-size:15px;
   opacity:.6;
-}
-
-/* VIGNETTE */
-.vignette{
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle at center,
-    transparent 60%,
-    rgba(0,0,0,.6) 100%);
-  pointer-events:none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="wall"></div>
-<div class="arch"></div>
-<div class="torch left"></div>
-<div class="torch right"></div>
-<div class="floor"></div>
-<div class="pedestal"></div>
+<div class="sky"></div>
+<div class="aurora"></div>
+
+<!-- Stars -->
+<div class="star" style="top:10%; left:20%;"></div>
+<div class="star" style="top:30%; left:70%;"></div>
+<div class="star" style="top:50%; left:40%;"></div>
+<div class="star" style="top:20%; left:80%;"></div>
+<div class="star" style="top:60%; left:15%;"></div>
+
+<div class="trees"></div>
+<div class="ground"></div>
+
+<div class="tent"></div>
+
+<div class="log"></div>
+<div class="log two"></div>
+
+<div class="fire">
+  <div class="flame one"></div>
+  <div class="flame two"></div>
+  <div class="flame three"></div>
+</div>
+
 <div class="egg"></div>
 
 <div class="text">
   <div class="level">PIECE 4 / 5</div>
-  <h1>The Hidden Chamber Reveals Its Secret</h1>
+  <h1>The Aurora Guards the Treasure</h1>
   <div class="subtitle">Your special word is:</div>
-  <div class="word">Sanctum</div>
-  <div class="footer">Only one fragment remains…</div>
+  <div class="word">Aurora</div>
+  <div class="footer">Only one final piece remains…</div>
 </div>
-
-<div class="vignette"></div>
 
 </body>
 </html>
