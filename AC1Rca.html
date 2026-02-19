@@ -5,110 +5,126 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Golden Easter Egg — Piece 3</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
 
 <style>
 *{ box-sizing:border-box; }
 html,body{ height:100%; margin:0; }
 
 body{
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family:'Baloo 2', cursive;
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
+  background: linear-gradient(180deg,#dff3ff 0%, #f6eaff 100%);
   position:relative;
-
-  /* Premium soft gradient */
-  background: linear-gradient(
-    135deg,
-    #f6e6ff 0%,
-    #e8f3ff 40%,
-    #fff3c4 100%
-  );
 }
 
-/* Subtle noise overlay */
-body::after{
-  content:"";
+/* Soft floating pastel blobs */
+.blob{
   position:absolute;
-  inset:0;
-  background-image: radial-gradient(rgba(0,0,0,.02) 1px, transparent 1px);
-  background-size: 3px 3px;
-  pointer-events:none;
+  border-radius:50%;
+  opacity:.25;
+  filter:blur(40px);
 }
 
-/* Decorative floating eggs */
+.blob.one{
+  width:400px;
+  height:400px;
+  background:#ffd6e7;
+  top:-100px;
+  left:-120px;
+}
+
+.blob.two{
+  width:450px;
+  height:450px;
+  background:#fff2a8;
+  bottom:-150px;
+  right:-100px;
+}
+
+/* Cute decorative eggs */
 .egg{
   position:absolute;
-  width:110px;
-  height:140px;
+  width:90px;
+  height:120px;
   border-radius:50% 50% 48% 48% / 58% 58% 42% 42%;
-  box-shadow:0 20px 60px rgba(0,0,0,.15);
-  opacity:.85;
-  animation: float 8s ease-in-out infinite;
+  box-shadow:0 15px 35px rgba(0,0,0,.15);
+  animation: float 6s ease-in-out infinite;
 }
 
 .egg.left{
   top:18%;
-  left:12%;
-  background: linear-gradient(135deg,#ffd6e7,#fff2b3);
+  left:10%;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #ffd6e7,
+      #ffd6e7 12px,
+      #fff2a8 12px,
+      #fff2a8 24px
+    );
 }
 
 .egg.right{
-  bottom:20%;
-  right:15%;
-  background: linear-gradient(135deg,#d6ecff,#eadcff);
+  bottom:22%;
+  right:12%;
+  background:
+    radial-gradient(circle at 50% 35%, #ffffff 12%, transparent 13%),
+    radial-gradient(circle at 30% 65%, #ffffff 10%, transparent 11%),
+    #d6ecff;
   animation-delay:2s;
 }
 
 @keyframes float{
   0%,100%{ transform:translateY(0); }
-  50%{ transform:translateY(18px); }
+  50%{ transform:translateY(15px); }
 }
 
-/* Glass card */
+/* Card */
 .card{
-  width:min(720px,90%);
-  padding:70px 60px;
-  border-radius:28px;
+  background:white;
+  padding:80px 70px;
+  border-radius:30px;
+  box-shadow:0 40px 100px rgba(0,0,0,.12);
+  max-width:720px;
   text-align:center;
   position:relative;
-  backdrop-filter: blur(18px);
-  background: rgba(255,255,255,.65);
-  box-shadow:
-    0 40px 120px rgba(0,0,0,.15),
-    inset 0 1px 0 rgba(255,255,255,.6);
+  z-index:10;
 }
 
 h1{
-  margin:0 0 20px;
-  font-size: clamp(28px,3vw,36px);
+  font-size:34px;
   font-weight:800;
-  color:#1f1f1f;
+  margin:0 0 20px;
 }
 
 .subtitle{
-  font-size:16px;
+  font-size:18px;
+  margin-bottom:30px;
   opacity:.7;
-  margin-bottom:25px;
 }
 
-/* Elegant gold badge */
+/* Goofy gold pill */
 .word{
   display:inline-block;
-  padding:18px 50px;
+  padding:22px 60px;
   border-radius:999px;
+  font-size:32px;
   font-weight:800;
-  font-size:30px;
-  letter-spacing:3px;
-  background: linear-gradient(90deg,#ffd700,#fff3a6,#ffd700);
+  letter-spacing:2px;
+  background:linear-gradient(90deg,#ffd700,#fff3a6,#ffd700);
   background-size:200% auto;
   color:#5a4a00;
-  box-shadow:
-    0 10px 30px rgba(255,215,0,.4),
-    inset 0 2px 6px rgba(255,255,255,.6);
+  box-shadow:0 15px 40px rgba(255,215,0,.4);
   animation: shimmer 4s linear infinite;
+  transition:.25s ease;
+}
+
+.word:hover{
+  transform:scale(1.05);
 }
 
 @keyframes shimmer{
@@ -116,8 +132,8 @@ h1{
 }
 
 .footer{
-  margin-top:30px;
-  font-size:14px;
+  margin-top:35px;
+  font-size:15px;
   opacity:.6;
 }
 
@@ -126,14 +142,17 @@ h1{
 
 <body>
 
+<div class="blob one"></div>
+<div class="blob two"></div>
+
 <div class="egg left"></div>
 <div class="egg right"></div>
 
 <div class="card">
-  <h1>You have found piece 3/5 of the golden Easter Egg!</h1>
+  <h1>You found piece 3/5 of the Golden Easter Egg! 🐣</h1>
   <div class="subtitle">Your special word is:</div>
   <div class="word">Easter</div>
-  <div class="footer">🐣 Only 2 pieces remain…</div>
+  <div class="footer">Only 2 pieces remain…</div>
 </div>
 
 </body>
