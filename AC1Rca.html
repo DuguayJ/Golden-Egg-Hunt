@@ -13,38 +13,50 @@ html,body{height:100%;margin:0;}
 
 body{
   font-family:'Press Start 2P', monospace;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
   background:#5ec6ff;
+  overflow:hidden;
   image-rendering:pixelated;
   position:relative;
+  color:#000;
 }
 
-/* --- PIXEL SKY GRADIENT BLOCK STYLE --- */
+/* SKY + MOUNTAINS */
 .sky{
   position:absolute;
   inset:0;
-  background:
-    linear-gradient(#5ec6ff 0 60%, #66d46a 60% 75%, #4caf50 75% 100%);
-  z-index:0;
+  background:linear-gradient(#5ec6ff 0 60%, #66d46a 60% 75%, #4caf50 75% 100%);
 }
 
-/* --- PIXEL SUN --- */
-.sun{
+.mountains{
   position:absolute;
-  top:60px;
-  right:120px;
-  width:80px;
-  height:80px;
-  background:#ffd700;
-  box-shadow:
-    0 0 0 8px #ffec70,
-    0 0 0 16px #ffe066;
+  bottom:160px;
+  width:100%;
+  height:200px;
+  background:
+    linear-gradient(135deg,#4b6cb7 25%, transparent 25%) -50px 0,
+    linear-gradient(225deg,#4b6cb7 25%, transparent 25%) -50px 0,
+    linear-gradient(315deg,#4b6cb7 25%, transparent 25%),
+    linear-gradient(45deg,#4b6cb7 25%, transparent 25%);
+  background-size:100px 100px;
+  background-color:#3a5aa0;
+  opacity:.7;
 }
 
-/* --- CLOUDS --- */
+/* HUD */
+.hud{
+  position:absolute;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#fff;
+  border:6px solid #000;
+  padding:15px 25px;
+  box-shadow:6px 6px 0 #000;
+  z-index:10;
+  font-size:14px;
+}
+
+/* CLOUDS */
 .cloud{
   position:absolute;
   width:120px;
@@ -55,23 +67,22 @@ body{
     40px 0 #fff,
     10px -10px #fff,
     30px -10px #fff;
-  animation: moveCloud 40s linear infinite;
+  animation: moveCloud 50s linear infinite;
 }
-
-.cloud.one{ top:100px; left:-150px; }
-.cloud.two{ top:180px; left:-250px; animation-delay:15s;}
+.cloud.one{ top:100px; left:-200px; }
+.cloud.two{ top:180px; left:-300px; animation-delay:20s; }
 
 @keyframes moveCloud{
   from{ transform:translateX(0); }
-  to{ transform:translateX(140vw); }
+  to{ transform:translateX(150vw); }
 }
 
-/* --- GROUND TILES --- */
+/* GROUND */
 .ground{
   position:absolute;
   bottom:0;
   width:100%;
-  height:120px;
+  height:140px;
   background:
     repeating-linear-gradient(
       90deg,
@@ -81,59 +92,73 @@ body{
   border-top:6px solid #000;
 }
 
-/* --- FLOWERS --- */
-.flower{
+/* COLLECTIBLE EGG */
+.collectible{
   position:absolute;
-  bottom:110px;
-  width:20px;
-  height:20px;
-  background:#ff69b4;
-  box-shadow:
-    20px 0 #ff69b4,
-    -20px 0 #ff69b4,
-    0 20px #ff69b4,
-    0 -20px #ff69b4;
-}
-
-.flower.one{ left:20%; }
-.flower.two{ left:70%; }
-
-/* --- PIXEL EGGS --- */
-.egg{
-  position:absolute;
-  bottom:120px;
+  bottom:170px;
+  left:45%;
   width:40px;
   height:50px;
-  background:#ffb3c6;
+  background:#ffd700;
   border:4px solid #000;
-  animation:bounce 2s infinite;
+  animation: spinFloat 2s infinite linear;
 }
 
-.egg.one{ left:35%; }
-.egg.two{ left:55%; animation-delay:1s;}
-.egg.three{ left:80%; animation-delay:.5s;}
-
-@keyframes bounce{
-  0%,100%{ transform:translateY(0);}
-  50%{ transform:translateY(-10px);}
+@keyframes spinFloat{
+  0%{ transform:translateY(0) scaleX(1);}
+  25%{ transform:translateY(-10px) scaleX(.8);}
+  50%{ transform:translateY(0) scaleX(1);}
+  75%{ transform:translateY(-10px) scaleX(.8);}
+  100%{ transform:translateY(0) scaleX(1);}
 }
 
-/* --- CARD --- */
+/* PIXEL BUNNY */
+.bunny{
+  position:absolute;
+  bottom:150px;
+  left:-60px;
+  width:40px;
+  height:40px;
+  background:#fff;
+  border:4px solid #000;
+  animation: walk 12s linear infinite;
+}
+
+/* Ears */
+.bunny::before,
+.bunny::after{
+  content:"";
+  position:absolute;
+  width:10px;
+  height:25px;
+  background:#fff;
+  border:4px solid #000;
+  top:-25px;
+}
+
+.bunny::before{ left:2px; }
+.bunny::after{ right:2px; }
+
+@keyframes walk{
+  0%{ left:-60px; transform:scaleX(1);}
+  49%{ transform:scaleX(1);}
+  50%{ transform:scaleX(-1);}
+  100%{ left:110%; transform:scaleX(-1);}
+}
+
+/* CARD */
 .card{
-  position:relative;
-  z-index:5;
+  position:absolute;
+  bottom:220px;
+  left:50%;
+  transform:translateX(-50%);
   background:#fff;
   border:8px solid #000;
   padding:60px 50px;
   box-shadow:12px 12px 0 #000;
   text-align:center;
   max-width:750px;
-  animation: floatCard 4s ease-in-out infinite;
-}
-
-@keyframes floatCard{
-  0%,100%{ transform:translateY(0);}
-  50%{ transform:translateY(-6px);}
+  z-index:5;
 }
 
 h1{
@@ -147,7 +172,7 @@ h1{
   margin-bottom:25px;
 }
 
-/* --- GOLD WORD --- */
+/* GOLD WORD */
 .word{
   display:inline-block;
   padding:18px 30px;
@@ -168,7 +193,7 @@ h1{
   font-size:12px;
 }
 
-/* --- CRT SCANLINES --- */
+/* CRT SCANLINES */
 body::after{
   content:"";
   position:absolute;
@@ -189,17 +214,15 @@ body::after{
 <body>
 
 <div class="sky"></div>
-<div class="sun"></div>
+<div class="mountains"></div>
+
+<div class="hud">YOU ARE AWESOME</div>
 
 <div class="cloud one"></div>
 <div class="cloud two"></div>
 
-<div class="flower one"></div>
-<div class="flower two"></div>
-
-<div class="egg one"></div>
-<div class="egg two"></div>
-<div class="egg three"></div>
+<div class="collectible"></div>
+<div class="bunny"></div>
 
 <div class="ground"></div>
 
