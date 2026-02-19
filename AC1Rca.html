@@ -25,6 +25,21 @@ body{
   position:absolute;
   inset:0;
   background:linear-gradient(#5ec6ff 0 60%, #66d46a 60% 75%, #4caf50 75% 100%);
+  z-index:0;
+}
+
+/* SUN */
+.sun{
+  position:absolute;
+  top:60px;
+  right:120px;
+  width:60px;
+  height:60px;
+  background:#ffd700;
+  box-shadow:
+    0 0 0 6px #ffec70,
+    0 0 0 12px #ffe066;
+  z-index:1;
 }
 
 /* PIXEL STARS */
@@ -34,11 +49,12 @@ body{
   height:6px;
   background:#fff;
   animation: twinkle 1.5s infinite alternate;
+  z-index:1;
 }
-.star:nth-child(1){ top:40px; left:20%; }
-.star:nth-child(2){ top:80px; left:50%; animation-delay:.5s;}
-.star:nth-child(3){ top:120px; left:70%; animation-delay:1s;}
-.star:nth-child(4){ top:60px; left:85%; animation-delay:.7s;}
+.star.s1{ top:40px; left:20%; }
+.star.s2{ top:80px; left:50%; animation-delay:.5s;}
+.star.s3{ top:120px; left:70%; animation-delay:1s;}
+.star.s4{ top:60px; left:85%; animation-delay:.7s;}
 
 @keyframes twinkle{
   from{ opacity:.3; }
@@ -59,6 +75,7 @@ body{
   background-size:100px 100px;
   background-color:#3a5aa0;
   opacity:.7;
+  z-index:2;
 }
 
 /* HUD */
@@ -87,6 +104,7 @@ body{
     10px -10px #fff,
     30px -10px #fff;
   animation: moveCloud 50s linear infinite;
+  z-index:1;
 }
 .cloud.one{ top:100px; left:-200px; }
 .cloud.two{ top:180px; left:-300px; animation-delay:20s; }
@@ -109,7 +127,35 @@ body{
       #357a35 20px 40px
     );
   border-top:6px solid #000;
+  z-index:3;
 }
+
+/* PIXEL FLOWERS */
+.flower{
+  position:absolute;
+  bottom:110px;
+  width:6px;
+  height:6px;
+  background:#ff69b4;
+  z-index:4;
+}
+.flower::before,
+.flower::after{
+  content:"";
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:#ff69b4;
+}
+.flower::before{ left:-6px; }
+.flower::after{ left:6px; }
+
+.flower.f1{ left:20%; }
+.flower.f2{ left:35%; background:#ffd700; }
+.flower.f2::before, .flower.f2::after{ background:#ffd700; }
+.flower.f3{ left:55%; background:#ffffff; }
+.flower.f3::before, .flower.f3::after{ background:#ffffff; }
+.flower.f4{ left:75%; }
 
 /* COLLECTIBLE EGG */
 .collectible{
@@ -121,6 +167,7 @@ body{
   background:#ffd700;
   border:4px solid #000;
   animation: spinFloat 2s infinite linear;
+  z-index:4;
 }
 
 @keyframes spinFloat{
@@ -131,7 +178,7 @@ body{
   100%{ transform:translateY(0) scaleX(1);}
 }
 
-/* BETTER PIXEL BUNNY */
+/* PIXEL BUNNY */
 .bunny{
   position:absolute;
   bottom:150px;
@@ -141,9 +188,9 @@ body{
   background:#fff;
   border:4px solid #000;
   animation: walk 12s linear infinite;
+  z-index:5;
 }
 
-/* Ears */
 .bunny::before,
 .bunny::after{
   content:"";
@@ -158,7 +205,6 @@ body{
 .bunny::before{ left:2px; }
 .bunny::after{ right:2px; }
 
-/* Eyes */
 .bunny .eye{
   position:absolute;
   width:6px;
@@ -169,7 +215,6 @@ body{
 .bunny .eye.left{ left:10px; }
 .bunny .eye.right{ right:10px; }
 
-/* Nose */
 .bunny .nose{
   position:absolute;
   width:6px;
@@ -180,7 +225,6 @@ body{
   transform:translateX(-50%);
 }
 
-/* Feet */
 .bunny .feet{
   position:absolute;
   bottom:-8px;
@@ -211,18 +255,18 @@ body{
   box-shadow:12px 12px 0 #000;
   text-align:center;
   max-width:750px;
-  z-index:5;
+  z-index:6;
+}
+
+.level{
+  font-size:14px;
+  margin-bottom:25px;
 }
 
 h1{
   font-size:18px;
   line-height:1.6;
   margin-bottom:20px;
-}
-
-.level{
-  font-size:14px;
-  margin-bottom:25px;
 }
 
 .subtitle{
@@ -250,6 +294,7 @@ h1{
   font-size:12px;
 }
 
+/* CRT scanlines */
 body::after{
   content:"";
   position:absolute;
@@ -270,14 +315,15 @@ body::after{
 <body>
 
 <div class="sky"></div>
+<div class="sun"></div>
 <div class="mountains"></div>
 
-<div class="star"></div>
-<div class="star"></div>
-<div class="star"></div>
-<div class="star"></div>
+<div class="star s1"></div>
+<div class="star s2"></div>
+<div class="star s3"></div>
+<div class="star s4"></div>
 
-<div class="hud">GOOD JOB!</div>
+<div class="hud">YOU ARE AWESOME</div>
 
 <div class="cloud one"></div>
 <div class="cloud two"></div>
@@ -293,6 +339,11 @@ body::after{
 </div>
 
 <div class="ground"></div>
+
+<div class="flower f1"></div>
+<div class="flower f2"></div>
+<div class="flower f3"></div>
+<div class="flower f4"></div>
 
 <div class="card">
   <div class="level">LEVEL 3</div>
