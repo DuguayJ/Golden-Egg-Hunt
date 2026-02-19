@@ -19,7 +19,7 @@ body{
   color:#000;
 }
 
-/* SKY (clean blue) */
+/* SKY */
 .sky{
   position:absolute;
   inset:0;
@@ -129,7 +129,7 @@ body{
   z-index:3;
 }
 
-/* BETTER PIXEL FLOWERS */
+/* FLOWERS */
 .flower{
   position:absolute;
   bottom:140px;
@@ -138,8 +138,6 @@ body{
   background:#2f7d32;
   z-index:4;
 }
-
-/* leaves */
 .flower::after{
   content:"";
   position:absolute;
@@ -150,8 +148,6 @@ body{
   background:#3fa34d;
   box-shadow:12px 0 #3fa34d;
 }
-
-/* tulip */
 .flower.tulip::before{
   content:"";
   position:absolute;
@@ -164,8 +160,6 @@ body{
     4px -4px #ff69b4,
     -4px -4px #ff69b4;
 }
-
-/* daisy */
 .flower.daisy::before{
   content:"";
   position:absolute;
@@ -180,8 +174,6 @@ body{
     -6px 0 #ffffff,
     6px 0 #ffffff;
 }
-
-/* yellow center */
 .flower.daisy span{
   position:absolute;
   top:-8px;
@@ -190,13 +182,52 @@ body{
   height:8px;
   background:#ffd700;
 }
-
-/* Placement */
 .flower.f1{ left:12%; }
 .flower.f2{ left:28%; }
 .flower.f3{ left:45%; }
 .flower.f4{ left:65%; }
 .flower.f5{ left:80%; }
+
+/* BUTTERFLIES */
+.butterfly{
+  position:absolute;
+  width:14px;
+  height:10px;
+  z-index:4;
+  animation: floatButterfly 12s linear infinite;
+}
+
+.butterfly::before,
+.butterfly::after{
+  content:"";
+  position:absolute;
+  width:8px;
+  height:8px;
+  top:1px;
+  animation: flap .35s infinite alternate;
+}
+
+.butterfly::before{ left:0; }
+.butterfly::after{ right:0; }
+
+.butterfly.pink::before,
+.butterfly.pink::after{ background:#ff69b4; }
+
+.butterfly.blue::before,
+.butterfly.blue::after{ background:#87cefa; }
+
+@keyframes flap{
+  from{ transform:scaleY(1); }
+  to{ transform:scaleY(.5); }
+}
+
+@keyframes floatButterfly{
+  0%{ transform:translate(0,0); }
+  25%{ transform:translate(40px,-20px); }
+  50%{ transform:translate(80px,0); }
+  75%{ transform:translate(120px,-15px); }
+  100%{ transform:translate(160px,0); }
+}
 
 /* COLLECTIBLE */
 .collectible{
@@ -210,67 +241,12 @@ body{
   animation: spinFloat 2s infinite linear;
   z-index:4;
 }
-
 @keyframes spinFloat{
   0%{ transform:translateY(0) scaleX(1);}
   25%{ transform:translateY(-10px) scaleX(.8);}
   50%{ transform:translateY(0) scaleX(1);}
   75%{ transform:translateY(-10px) scaleX(.8);}
   100%{ transform:translateY(0) scaleX(1);}
-}
-/* PIXEL BUTTERFLIES */
-.butterfly{
-  position:absolute;
-  width:16px;
-  height:12px;
-  z-index:4;
-  animation: flutter 6s linear infinite;
-}
-
-/* wings */
-.butterfly::before,
-.butterfly::after{
-  content:"";
-  position:absolute;
-  width:8px;
-  height:8px;
-  top:2px;
-  animation: flap .4s infinite alternate;
-}
-
-.butterfly::before{
-  left:0;
-}
-
-.butterfly::after{
-  right:0;
-}
-
-/* pink butterfly */
-.butterfly.pink::before,
-.butterfly.pink::after{
-  background:#ff69b4;
-}
-
-/* blue butterfly */
-.butterfly.blue::before,
-.butterfly.blue::after{
-  background:#87cefa;
-}
-
-/* wing flap */
-@keyframes flap{
-  from{ transform:scaleY(1); }
-  to{ transform:scaleY(.5); }
-}
-
-/* floating path */
-@keyframes flutter{
-  0%{ transform:translateX(0) translateY(0); }
-  25%{ transform:translateX(40px) translateY(-20px); }
-  50%{ transform:translateX(80px) translateY(0); }
-  75%{ transform:translateX(120px) translateY(-15px); }
-  100%{ transform:translateX(160px) translateY(0); }
 }
 
 /* BUNNY */
@@ -285,7 +261,6 @@ body{
   animation: walk 12s linear infinite;
   z-index:5;
 }
-
 .bunny::before,
 .bunny::after{
   content:"";
@@ -296,10 +271,8 @@ body{
   border:4px solid #000;
   top:-25px;
 }
-
 .bunny::before{ left:2px; }
 .bunny::after{ right:2px; }
-
 .bunny .eye{
   position:absolute;
   width:6px;
@@ -309,7 +282,6 @@ body{
 }
 .bunny .eye.left{ left:10px; }
 .bunny .eye.right{ right:10px; }
-
 .bunny .nose{
   position:absolute;
   width:6px;
@@ -319,7 +291,6 @@ body{
   left:50%;
   transform:translateX(-50%);
 }
-
 @keyframes walk{
   0%{ left:-60px; transform:scaleX(1);}
   49%{ transform:scaleX(1);}
@@ -341,23 +312,9 @@ body{
   max-width:750px;
   z-index:6;
 }
-
-.level{
-  font-size:14px;
-  margin-bottom:25px;
-}
-
-h1{
-  font-size:18px;
-  line-height:1.6;
-  margin-bottom:20px;
-}
-
-.subtitle{
-  font-size:14px;
-  margin-bottom:25px;
-}
-
+.level{ font-size:14px; margin-bottom:25px; }
+h1{ font-size:18px; line-height:1.6; margin-bottom:20px; }
+.subtitle{ font-size:14px; margin-bottom:25px; }
 .word{
   display:inline-block;
   padding:18px 30px;
@@ -367,16 +324,11 @@ h1{
   font-size:18px;
   animation: pulse 1.5s infinite alternate;
 }
-
 @keyframes pulse{
   from{ background:#ffd700;}
   to{ background:#fff066;}
 }
-
-.footer{
-  margin-top:30px;
-  font-size:12px;
-}
+.footer{ margin-top:30px; font-size:12px; }
 
 body::after{
   content:"";
@@ -391,7 +343,6 @@ body::after{
   pointer-events:none;
   opacity:.2;
 }
-
 </style>
 </head>
 
@@ -412,6 +363,10 @@ body::after{
 <div class="cloud two"></div>
 
 <div class="collectible"></div>
+
+<!-- Butterflies -->
+<div class="butterfly pink" style="top:220px; left:10%; animation-duration:10s;"></div>
+<div class="butterfly blue" style="top:250px; left:55%; animation-duration:14s;"></div>
 
 <div class="bunny">
   <div class="eye left"></div>
@@ -437,4 +392,3 @@ body::after{
 
 </body>
 </html>
-
