@@ -188,37 +188,80 @@ body{
 .flower.f4{ left:65%; }
 .flower.f5{ left:80%; }
 
-/* BUTTERFLIES */
+/* BUTTERFLIES (SPRITE STYLE) */
 .butterfly{
   position:absolute;
-  width:14px;
-  height:10px;
+  width:20px;
+  height:20px;
   z-index:4;
-  animation: floatButterfly 12s linear infinite;
+  animation: floatButterfly 14s linear infinite;
 }
 
-.butterfly::before,
-.butterfly::after{
-  content:"";
+.butterfly .body{
+  position:absolute;
+  left:9px;
+  top:6px;
+  width:2px;
+  height:10px;
+  background:#3b2a1a;
+}
+
+.butterfly .antenna{
+  position:absolute;
+  width:2px;
+  height:6px;
+  background:#3b2a1a;
+  top:0;
+}
+.butterfly .antenna.left{ left:6px; transform:rotate(-25deg); }
+.butterfly .antenna.right{ right:6px; transform:rotate(25deg); }
+
+.butterfly .wing-top{
+  position:absolute;
+  width:10px;
+  height:10px;
+  top:2px;
+  left:0;
+  animation: flap 0.35s infinite alternate;
+}
+
+.butterfly .wing-bottom{
   position:absolute;
   width:8px;
   height:8px;
-  top:1px;
-  animation: flap .35s infinite alternate;
+  bottom:2px;
+  left:2px;
+  animation: flap 0.35s infinite alternate;
 }
 
-.butterfly::before{ left:0; }
-.butterfly::after{ right:0; }
+/* Color variants */
+.butterfly.purple .wing-top,
+.butterfly.purple .wing-bottom{
+  background:#9b59ff;
+  box-shadow:2px 2px #6f2dbd;
+}
 
-.butterfly.pink::before,
-.butterfly.pink::after{ background:#ff69b4; }
+.butterfly.orange .wing-top,
+.butterfly.orange .wing-bottom{
+  background:#ffb347;
+  box-shadow:2px 2px #ff8800;
+}
 
-.butterfly.blue::before,
-.butterfly.blue::after{ background:#87cefa; }
+.butterfly.blue .wing-top,
+.butterfly.blue .wing-bottom{
+  background:#3ec6ff;
+  box-shadow:2px 2px #1a9edb;
+}
+
+.butterfly.green .wing-top,
+.butterfly.green .wing-bottom{
+  background:#66d46a;
+  box-shadow:2px 2px #3fa34d;
+}
 
 @keyframes flap{
   from{ transform:scaleY(1); }
-  to{ transform:scaleY(.5); }
+  to{ transform:scaleY(.6); }
 }
 
 @keyframes floatButterfly{
@@ -364,9 +407,22 @@ body::after{
 
 <div class="collectible"></div>
 
-<!-- Butterflies -->
-<div class="butterfly pink" style="top:220px; left:10%; animation-duration:10s;"></div>
-<div class="butterfly blue" style="top:250px; left:55%; animation-duration:14s;"></div>
+<!-- SPRITE BUTTERFLIES -->
+<div class="butterfly purple" style="top:220px; left:10%;">
+  <div class="body"></div>
+  <div class="antenna left"></div>
+  <div class="antenna right"></div>
+  <div class="wing-top"></div>
+  <div class="wing-bottom"></div>
+</div>
+
+<div class="butterfly orange" style="top:250px; left:55%; animation-duration:18s;">
+  <div class="body"></div>
+  <div class="antenna left"></div>
+  <div class="antenna right"></div>
+  <div class="wing-top"></div>
+  <div class="wing-bottom"></div>
+</div>
 
 <div class="bunny">
   <div class="eye left"></div>
