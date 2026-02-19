@@ -14,88 +14,75 @@ html,body{height:100%;margin:0;}
 body{
   font-family:'Inter', sans-serif;
   overflow:hidden;
-  background:#0d0c1d;
+  background:#1c1b22;
   color:white;
   position:relative;
 }
 
-/* BACKGROUND DEPTH LAYERS */
-.layer1{
+/* STONE WALL */
+.wall{
   position:absolute;
   inset:0;
   background:
-    radial-gradient(circle at 50% 20%, rgba(80,60,150,.4), transparent 60%),
-    radial-gradient(circle at 30% 70%, rgba(50,40,120,.5), transparent 60%);
+    linear-gradient(#2a2933,#1c1b22),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,.15) 0px,
+      rgba(0,0,0,.15) 2px,
+      transparent 2px,
+      transparent 60px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,.15) 0px,
+      rgba(0,0,0,.15) 2px,
+      transparent 2px,
+      transparent 80px
+    );
 }
 
-.layer2{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:50%;
-  background:linear-gradient(to top,#0a0918,transparent);
-}
-
-/* DISTANT ARCH SILHOUETTE */
+/* TEMPLE ARCH */
 .arch{
   position:absolute;
-  bottom:200px;
+  bottom:180px;
   left:50%;
   transform:translateX(-50%);
   width:600px;
   height:350px;
   border-radius:300px 300px 0 0;
-  background:linear-gradient(#1a1735,#0d0c1d);
-  opacity:.6;
+  background:linear-gradient(#1a1920,#0f0e14);
+  box-shadow:inset 0 0 80px rgba(0,0,0,.8);
 }
 
-/* FLOOR GLOW */
-.floor-glow{
+/* TORCH GLOW (Left & Right) */
+.torch{
   position:absolute;
-  bottom:150px;
-  left:50%;
-  transform:translateX(-50%);
-  width:500px;
+  width:120px;
   height:200px;
-  background:radial-gradient(circle, rgba(255,215,0,.25), transparent 70%);
+  background:radial-gradient(circle,
+    rgba(255,140,0,.4),
+    transparent 70%);
+  top:35%;
+  animation:flicker 4s infinite alternate;
 }
 
-/* LIGHT RAYS */
-.rays{
-  position:absolute;
-  bottom:200px;
-  left:50%;
-  transform:translateX(-50%);
-  width:500px;
-  height:500px;
-  background:
-    conic-gradient(
-      rgba(255,215,0,.15) 0deg,
-      transparent 20deg,
-      rgba(255,215,0,.15) 40deg,
-      transparent 60deg,
-      rgba(255,215,0,.15) 80deg,
-      transparent 100deg,
-      rgba(255,215,0,.15) 120deg,
-      transparent 140deg,
-      rgba(255,215,0,.15) 160deg,
-      transparent 180deg,
-      rgba(255,215,0,.15) 200deg,
-      transparent 220deg,
-      rgba(255,215,0,.15) 240deg,
-      transparent 260deg,
-      rgba(255,215,0,.15) 280deg,
-      transparent 300deg,
-      rgba(255,215,0,.15) 320deg,
-      transparent 340deg
-    );
-  border-radius:50%;
-  animation:rotate 25s linear infinite;
-  pointer-events:none;
+.torch.left{ left:10%; }
+.torch.right{ right:10%; }
+
+@keyframes flicker{
+  0%{opacity:.8;}
+  50%{opacity:1;}
+  100%{opacity:.85;}
 }
-@keyframes rotate{
-  from{transform:translateX(-50%) rotate(0deg);}
-  to{transform:translateX(-50%) rotate(360deg);}
+
+/* FLOOR */
+.floor{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:160px;
+  background:linear-gradient(#1a1a1f,#111116);
+  box-shadow:inset 0 10px 40px rgba(0,0,0,.8);
 }
 
 /* PEDESTAL */
@@ -106,8 +93,8 @@ body{
   transform:translateX(-50%);
   width:280px;
   height:120px;
-  background:linear-gradient(#3e3e55,#1e1e2f);
-  border-radius:20px;
+  background:linear-gradient(#444453,#2a2a35);
+  border-radius:8px;
   box-shadow:0 30px 60px rgba(0,0,0,.8);
 }
 
@@ -126,13 +113,29 @@ body{
     0 0 120px rgba(255,215,0,.4);
   animation:pulse 3s ease-in-out infinite;
 }
+
 @keyframes pulse{
   0%{transform:translateX(-50%) scale(1);}
-  50%{transform:translateX(-50%) scale(1.03);}
+  50%{transform:translateX(-50%) scale(1.04);}
   100%{transform:translateX(-50%) scale(1);}
 }
 
-/* TEXT OVERLAY */
+/* EGG FLOOR GLOW */
+.egg::after{
+  content:"";
+  position:absolute;
+  bottom:-40px;
+  left:50%;
+  transform:translateX(-50%);
+  width:220px;
+  height:100px;
+  background:radial-gradient(circle,
+    rgba(255,215,0,.25),
+    transparent 70%);
+  border-radius:50%;
+}
+
+/* TEXT */
 .text{
   position:absolute;
   top:80px;
@@ -174,26 +177,38 @@ body{
   font-size:15px;
   opacity:.6;
 }
+
+/* VIGNETTE */
+.vignette{
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at center,
+    transparent 60%,
+    rgba(0,0,0,.6) 100%);
+  pointer-events:none;
+}
 </style>
 </head>
 
 <body>
 
-<div class="layer1"></div>
-<div class="layer2"></div>
+<div class="wall"></div>
 <div class="arch"></div>
-<div class="floor-glow"></div>
-<div class="rays"></div>
+<div class="torch left"></div>
+<div class="torch right"></div>
+<div class="floor"></div>
 <div class="pedestal"></div>
 <div class="egg"></div>
 
 <div class="text">
   <div class="level">PIECE 4 / 5</div>
-  <h1>The Sanctum Awakens</h1>
+  <h1>The Hidden Chamber Reveals Its Secret</h1>
   <div class="subtitle">Your special word is:</div>
   <div class="word">Sanctum</div>
   <div class="footer">Only one fragment remains…</div>
 </div>
+
+<div class="vignette"></div>
 
 </body>
 </html>
