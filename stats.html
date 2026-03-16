@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Golden Egg Hunt Stats</title>
+<style>
+body{
+font-family:Arial;
+background:#111;
+color:white;
+text-align:center;
+}
+table{
+margin:auto;
+border-collapse:collapse;
+}
+td,th{
+padding:10px 20px;
+border:1px solid #444;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🥚 Golden Egg Hunt Dashboard</h1>
+
+<table>
+<tr>
+<th>Egg</th>
+<th>Scans</th>
+</tr>
+
+<tr>
+<td>7l86VB</td>
+<td id="7l86VB">Loading...</td>
+</tr>
+
+<tr>
+<td>AC1Rca</td>
+<td id="AC1Rca">Loading...</td>
+</tr>
+
+<tr>
+<td>Fishslap</td>
+<td id="Fishslap">Loading...</td>
+</tr>
+
+<tr>
+<td>HB9xeW</td>
+<td id="HB9xeW">Loading...</td>
+</tr>
+
+<tr>
+<td>MdC0El</td>
+<td id="MdC0El">Loading...</td>
+</tr>
+
+<tr>
+<td>chicken</td>
+<td id="chicken">Loading...</td>
+</tr>
+
+</table>
+
+<script>
+
+const eggs = [
+"7l86VB",
+"AC1Rca",
+"Fishslap",
+"HB9xeW",
+"MdC0El",
+"chicken"
+]
+
+eggs.forEach(egg=>{
+fetch(`https://api.countapi.xyz/get/golden-egg-hunt/${egg}`)
+.then(res=>res.json())
+.then(data=>{
+document.getElementById(egg).innerText = data.value || 0
+})
+})
+
+</script>
+
+</body>
+</html>
