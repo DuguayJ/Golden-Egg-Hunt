@@ -67,6 +67,12 @@ button:hover {
   transform: scale(1.06);
   background: #ffcc00;
 }
+
+#counter{
+  margin-top: 12px;
+  font-size: 16px;
+  opacity: 0.85;
+}
 </style>
 
 </head>
@@ -88,11 +94,49 @@ Scan QR codes hidden around the building to collect
 When you have them all, unlock the Golden Egg and claim your prize!
 </p>
 
+<h3 id="counter">🐣 Checking hunt activity...</h3>
+
 <a href="final.html">
 <button>Unlock Golden Egg</button>
 </a>
 
 </div>
+
+<script>
+
+function updateCounter(){
+
+fetch("https://golden-egg-hunt.goatcounter.com/counter/TOTAL.json")
+.then(res => res.json())
+.then(data => {
+
+let message
+
+if(data.count < 10)
+message = "🐣 The hunt has begun..."
+else if(data.count < 30)
+message = "🥚 Eggs are being discovered!"
+else if(data.count < 60)
+message = "🔥 The hunt is heating up!"
+else
+message = "🏆 The Golden Egg must be close!"
+
+document.getElementById("counter").innerText =
+message + " (" + data.count + " scans)"
+
+})
+.catch(()=>{
+document.getElementById("counter").innerText =
+"🥚 The hunt is underway..."
+})
+
+}
+
+updateCounter()
+
+setInterval(updateCounter,10000)
+
+</script>
 
 </body>
 </html>
