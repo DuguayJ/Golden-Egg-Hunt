@@ -1,34 +1,471 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>You Found an Egg!</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Golden Egg Hunt - Part 5</title>
+  <style>
+    :root {
+      --bg1: #fff6d6;
+      --bg2: #ffe4f1;
+      --bg3: #dff7ff;
+      --gold: #f6c445;
+      --gold-dark: #d69d15;
+      --pink: #ff82b2;
+      --lavender: #b592ff;
+      --mint: #8be0b2;
+      --sky: #78cfff;
+      --text: #5a3d2b;
+      --card: rgba(255, 255, 255, 0.82);
+      --shadow: 0 20px 50px rgba(109, 69, 23, 0.18);
+    }
 
-<style>
-body {
-  font-family: Arial;
-  text-align: center;
-  padding: 50px;
-}
-.word {
-  font-size: 40px;
-  font-weight: bold;
-  margin-top: 20px;
-}
-</style>
+    * {
+      box-sizing: border-box;
+    }
 
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top left, var(--bg1), transparent 35%),
+        radial-gradient(circle at top right, var(--bg2), transparent 35%),
+        radial-gradient(circle at bottom center, var(--bg3), transparent 40%),
+        linear-gradient(180deg, #fffdf8 0%, #fff2d8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .sky-glow,
+    .sky-glow::before,
+    .sky-glow::after {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(55px);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .sky-glow {
+      width: 260px;
+      height: 260px;
+      background: rgba(255, 130, 178, 0.28);
+      top: 8%;
+      left: 10%;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+
+    .sky-glow::before {
+      content: "";
+      width: 240px;
+      height: 240px;
+      background: rgba(120, 207, 255, 0.30);
+      top: 140px;
+      left: 70vw;
+      animation: drift 15s ease-in-out infinite alternate-reverse;
+    }
+
+    .sky-glow::after {
+      content: "";
+      width: 220px;
+      height: 220px;
+      background: rgba(139, 224, 178, 0.25);
+      top: 65vh;
+      left: 20vw;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+
+    .meadow {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 22vh;
+      background:
+        radial-gradient(circle at 20% 20%, #9af0bb 0 18%, transparent 19%),
+        radial-gradient(circle at 55% 30%, #7edd9d 0 16%, transparent 17%),
+        radial-gradient(circle at 80% 18%, #8be0b2 0 15%, transparent 16%),
+        linear-gradient(180deg, #9be68d 0%, #6acb68 100%);
+      border-top-left-radius: 50% 35px;
+      border-top-right-radius: 50% 35px;
+      box-shadow: inset 0 10px 20px rgba(255,255,255,0.25);
+    }
+
+    .flowers {
+      position: absolute;
+      inset: auto 0 10vh 0;
+      height: 110px;
+      pointer-events: none;
+      opacity: 0.95;
+    }
+
+    .flower {
+      position: absolute;
+      bottom: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      box-shadow:
+        0 -12px 0 0 #ffd6e7,
+        12px 0 0 0 #ffeaa7,
+        -12px 0 0 0 #c7b6ff,
+        0 12px 0 0 #b7f0cb;
+    }
+
+    .flower::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 45px;
+      background: #57b66a;
+      left: 6px;
+      top: 10px;
+      border-radius: 999px;
+      z-index: -1;
+    }
+
+    .card {
+      position: relative;
+      z-index: 5;
+      width: min(920px, calc(100% - 32px));
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255,255,255,0.65);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 34px 28px 30px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.45), transparent 40%),
+        radial-gradient(circle at 85% 15%, rgba(255, 208, 84, 0.18), transparent 22%);
+      pointer-events: none;
+    }
+
+    .top-banner {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #fff2a8, #ffd57d);
+      color: #7a4f00;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 20px rgba(246, 196, 69, 0.28);
+      animation: popIn 0.8s ease;
+    }
+
+    .egg-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 8px 0 14px;
+    }
+
+    .golden-egg {
+      width: 145px;
+      height: 185px;
+      position: relative;
+      border-radius: 50% 50% 46% 46% / 58% 58% 42% 42%;
+      background:
+        radial-gradient(circle at 35% 28%, #fff6bf 0 10%, transparent 11%),
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.6), 0 18%, transparent 19%),
+        linear-gradient(145deg, #fff1a1 0%, #f7d35a 28%, #efb729 58%, #d9980a 100%);
+      box-shadow:
+        inset -10px -18px 25px rgba(122, 78, 0, 0.20),
+        inset 12px 10px 18px rgba(255,255,255,0.45),
+        0 15px 35px rgba(214, 157, 21, 0.32);
+      animation: floatEgg 3.4s ease-in-out infinite;
+    }
+
+    .golden-egg::before,
+    .golden-egg::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.92;
+    }
+
+    .golden-egg::before {
+      width: 82px;
+      height: 14px;
+      top: 55px;
+      background: rgba(255, 255, 255, 0.55);
+      box-shadow:
+        0 36px 0 rgba(255, 236, 156, 0.9),
+        0 72px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .golden-egg::after {
+      width: 12px;
+      height: 12px;
+      top: 24px;
+      background: rgba(255,255,255,0.88);
+      box-shadow:
+        28px 18px 0 rgba(255,255,255,0.38),
+        -24px 30px 0 rgba(255,255,255,0.22),
+        18px 96px 0 rgba(255,255,255,0.25),
+        -30px 120px 0 rgba(255,255,255,0.22);
+    }
+
+    h1 {
+      margin: 8px 0 8px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.05;
+      color: #6e451e;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.65);
+    }
+
+    .subtitle {
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      line-height: 1.6;
+      max-width: 740px;
+      margin: 0 auto 26px;
+      color: #7b5a45;
+    }
+
+    .found-box {
+      position: relative;
+      margin: 0 auto 22px;
+      max-width: 760px;
+      padding: 24px 22px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,248,232,0.96));
+      border: 2px dashed rgba(246, 196, 69, 0.8);
+      box-shadow: inset 0 2px 10px rgba(255,255,255,0.7);
+    }
+
+    .part-label {
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #b87700;
+      margin-bottom: 10px;
+    }
+
+    .found-text {
+      font-size: clamp(1.25rem, 2.7vw, 2rem);
+      font-weight: 800;
+      margin: 0 0 14px;
+    }
+
+    .key-reveal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 28px;
+      min-width: 220px;
+      border-radius: 18px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: white;
+      background: linear-gradient(135deg, var(--pink), var(--lavender), var(--sky));
+      box-shadow:
+        0 12px 25px rgba(133, 101, 224, 0.28),
+        inset 0 2px 8px rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      animation: glowPulse 2.4s ease-in-out infinite;
+    }
+
+    .hint {
+      margin-top: 16px;
+      font-size: 0.98rem;
+      color: #8b6d5b;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      font-size: 0.95rem;
+      color: #8a715e;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle, #fff7bb 0%, #ffd54d 65%, rgba(255,213,77,0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: sparkle 2.8s linear infinite;
+      opacity: 0;
+    }
+
+    .floating-egg {
+      position: absolute;
+      width: 42px;
+      height: 54px;
+      border-radius: 50% 50% 46% 46% / 58% 58% 42% 42%;
+      opacity: 0.18;
+      z-index: 1;
+      animation: bob 8s ease-in-out infinite;
+    }
+
+    .e1 { top: 8%; left: 6%; background: linear-gradient(145deg, #ffd8ea, #ff8fb9); }
+    .e2 { top: 16%; right: 8%; background: linear-gradient(145deg, #d5c7ff, #9d84ff); animation-delay: 1.6s; }
+    .e3 { bottom: 24%; left: 12%; background: linear-gradient(145deg, #d8fff1, #88ddb3); animation-delay: 2.3s; }
+    .e4 { bottom: 28%; right: 14%; background: linear-gradient(145deg, #dff4ff, #79ccff); animation-delay: 0.9s; }
+
+    @keyframes floatEgg {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow:
+          0 12px 25px rgba(133, 101, 224, 0.28),
+          inset 0 2px 8px rgba(255,255,255,0.3);
+      }
+      50% {
+        transform: scale(1.03);
+        box-shadow:
+          0 16px 34px rgba(133, 101, 224, 0.38),
+          0 0 0 8px rgba(255, 255, 255, 0.25),
+          inset 0 2px 8px rgba(255,255,255,0.35);
+      }
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0); }
+      to { transform: translate(30px, -18px); }
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(3deg); }
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: translateY(0) scale(0.2);
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      60% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-60px) scale(1.25);
+        opacity: 0;
+      }
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        overflow-y: auto;
+      }
+
+      .card {
+        margin: 22px 0 120px;
+        padding: 26px 18px 24px;
+        border-radius: 24px;
+      }
+
+      .golden-egg {
+        width: 120px;
+        height: 155px;
+      }
+
+      .found-box {
+        padding: 20px 16px;
+      }
+
+      .key-reveal {
+        width: 100%;
+        min-width: 0;
+        letter-spacing: 2px;
+      }
+    }
+  </style>
 </head>
-/* SKY xD */
 <body>
+  <div class="sky-glow"></div>
 
-<h1>🥚 You found a hidden egg!</h1>
+  <div class="floating-egg e1"></div>
+  <div class="floating-egg e2"></div>
+  <div class="floating-egg e3"></div>
+  <div class="floating-egg e4"></div>
 
-<p>Your word is:</p>
+  <div class="card">
+    <div class="top-banner">🐣 Golden Egg Hunt Complete!</div>
 
-<div class="word">KEY</div>
+    <div class="egg-wrap">
+      <div class="golden-egg" aria-hidden="true"></div>
+    </div>
 
-<p>Collect all 5 words to unlock the Golden Egg.</p>
-<script data-goatcounter="https://golden-egg-hunt.goatcounter.com/count"
-async src="//gc.zgo.at/count.js"></script>
+    <h1>You Found the Final Piece!</h1>
+    <p class="subtitle">
+      Congratulations, egg hunter — you made it all the way to the last hidden clue.
+      This is the final word you need for the hunt.
+    </p>
+
+    <div class="found-box">
+      <div class="part-label">Part 5 / 5</div>
+      <p class="found-text">Your final word is:</p>
+      <div class="key-reveal">SUNSHINE</div>
+      <div class="hint">Enter this word on the final page to complete the challenge.</div>
+    </div>
+
+    <div class="footer-note">
+      🌷 Happy Easter and good luck! 🌷
+    </div>
+  </div>
+
+  <div class="flowers">
+    <div class="flower" style="left: 7%; transform: scale(0.95);"></div>
+    <div class="flower" style="left: 18%; transform: scale(1.1);"></div>
+    <div class="flower" style="left: 29%; transform: scale(0.85);"></div>
+    <div class="flower" style="left: 41%; transform: scale(1.05);"></div>
+    <div class="flower" style="left: 54%; transform: scale(0.9);"></div>
+    <div class="flower" style="left: 67%; transform: scale(1.15);"></div>
+    <div class="flower" style="left: 80%; transform: scale(0.95);"></div>
+    <div class="flower" style="left: 91%; transform: scale(1.05);"></div>
+  </div>
+
+  <div class="meadow"></div>
+
+  <script>
+    const sparkleCount = 26;
+    for (let i = 0; i < sparkleCount; i++) {
+      const s = document.createElement("div");
+      s.className = "sparkle";
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.top = 45 + Math.random() * 35 + "vh";
+      s.style.animationDelay = (Math.random() * 3) + "s";
+      s.style.animationDuration = (2.2 + Math.random() * 2.4) + "s";
+      s.style.transform = `scale(${0.4 + Math.random()})`;
+      document.body.appendChild(s);
+    }
+  </script>
 </body>
 </html>
