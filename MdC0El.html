@@ -6,90 +6,55 @@
 <title>Final Key</title>
 
 <style>
-:root {
-  --gold: #f6c445;
-  --gold-soft: #ffd86b;
-  --dark: #0f1226;
-  --card: rgba(255,255,255,0.06);
-  --border: rgba(255,255,255,0.15);
-}
-
-* {
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
-  font-family: "Segoe UI", system-ui, sans-serif;
-  background: radial-gradient(circle at top, #1c1f45, #0b0d1f);
+  background: radial-gradient(circle at top, #0c0f2a, #050714);
   color: white;
+  font-family: "Segoe UI", sans-serif;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  overflow: hidden;
 }
 
-/* subtle stars */
+/* stars */
 body::before {
   content: "";
   position: absolute;
   inset: 0;
   background-image: radial-gradient(white 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-size: 35px 35px;
   opacity: 0.15;
 }
 
-/* floating glow blobs */
-.glow {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(255,215,0,0.2), transparent);
-  filter: blur(80px);
-  animation: float 10s ease-in-out infinite alternate;
-}
-
-.glow:nth-child(1) { top: -100px; left: -100px; }
-.glow:nth-child(2) { bottom: -100px; right: -100px; animation-delay: 2s; }
-
-@keyframes float {
-  from { transform: translate(0,0); }
-  to { transform: translate(60px,40px); }
-}
-
-/* card */
+/* container */
 .card {
-  position: relative;
-  width: min(600px, 90%);
-  padding: 40px 30px;
-  border-radius: 24px;
-  background: var(--card);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border);
   text-align: center;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  width: min(600px, 90%);
+  padding: 40px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  position: relative;
 }
 
 /* header */
 .header {
-  font-size: 0.9rem;
   letter-spacing: 3px;
-  color: var(--gold-soft);
-  margin-bottom: 12px;
+  color: gold;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
 }
 
 h1 {
-  font-size: clamp(2.2rem, 5vw, 3.2rem);
-  margin: 0 0 12px;
-}
-
-h1 span {
-  color: var(--gold);
+  margin: 0;
+  font-size: 2.8rem;
 }
 
 .subtitle {
-  opacity: 0.8;
+  opacity: 0.7;
   margin-bottom: 30px;
 }
 
@@ -97,83 +62,115 @@ h1 span {
 .egg {
   width: 120px;
   height: 160px;
-  margin: 0 auto 25px;
-  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  margin: 30px auto;
+  border-radius: 50% 50% 45% 45%;
   background: linear-gradient(145deg, #ff9a9e, #fad0c4, #fbc2eb);
-  box-shadow: 0 0 40px rgba(255,200,200,0.4);
-  animation: floatEgg 3s ease-in-out infinite;
+  position: relative;
+  box-shadow: 0 0 30px rgba(255,200,200,0.3);
+  animation: pulseGlow 2s infinite;
 }
 
-@keyframes floatEgg {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+/* crack lines */
+.crack {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: white;
+  top: 50%;
+  opacity: 0;
 }
 
-/* key box */
-.key-box {
-  margin-top: 20px;
-  padding: 25px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.03);
+/* split animation */
+.split-top, .split-bottom {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  background: inherit;
+  border-radius: inherit;
+  transition: transform 1s ease;
 }
 
-.key-label {
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  opacity: 0.6;
-  margin-bottom: 10px;
+.split-top {
+  top: 0;
 }
 
-.key-text {
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
+.split-bottom {
+  bottom: 0;
+}
+
+/* reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 1s ease;
+}
+
+.word {
+  font-size: 3.2rem;
   font-weight: 900;
-  letter-spacing: 5px;
-  color: var(--gold);
-  text-shadow: 0 0 20px rgba(255,215,0,0.5);
-  animation: pulse 2s ease-in-out infinite;
+  color: gold;
+  text-shadow: 0 0 20px rgba(255,215,0,0.8);
 }
 
-@keyframes pulse {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-.footer {
-  margin-top: 20px;
-  font-size: 0.9rem;
-  opacity: 0.6;
+/* animations */
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 20px rgba(255,200,200,0.2); }
+  50% { box-shadow: 0 0 60px rgba(255,200,200,0.8); }
 }
 </style>
 </head>
 
 <body>
 
-<div class="glow"></div>
-<div class="glow"></div>
-
 <div class="card">
+  <div class="header">FINAL DISCOVERY</div>
+  <h1>You Found the Final Key</h1>
+  <p class="subtitle">Something is happening...</p>
 
-  <div class="header">EASTER EGG HUNT 2025</div>
-
-  <h1>You Found the <span>Final Key</span></h1>
-
-  <p class="subtitle">
-    You've collected all 5 clues. Here's your final word:
-  </p>
-
-  <div class="egg"></div>
-
-  <div class="key-box">
-    <div class="key-label">KEY 5 OF 5</div>
-    <div class="key-text">SUNSHINE</div>
+  <div class="egg" id="egg">
+    <div class="split-top" id="top"></div>
+    <div class="split-bottom" id="bottom"></div>
   </div>
 
-  <div class="footer">
-    Enter this word on the final page to complete the hunt 🐣
+  <div class="reveal" id="reveal">
+    <p>KEY 5 OF 5</p>
+    <div class="word">SUNSHINE</div>
   </div>
-
 </div>
+
+<script>
+setTimeout(() => {
+  document.getElementById("top").style.transform = "translateY(-80px) rotate(-10deg)";
+  document.getElementById("bottom").style.transform = "translateY(80px) rotate(10deg)";
+}, 1200);
+
+setTimeout(() => {
+  document.getElementById("reveal").style.opacity = 1;
+  document.getElementById("reveal").style.transform = "translateY(0)";
+}, 2000);
+
+/* confetti */
+const colors = ["gold","#ff6b6b","#6bcB77","#4d96ff"];
+for (let i = 0; i < 60; i++) {
+  const c = document.createElement("div");
+  c.style.position = "fixed";
+  c.style.width = "6px";
+  c.style.height = "6px";
+  c.style.background = colors[Math.floor(Math.random()*colors.length)];
+  c.style.top = "-10px";
+  c.style.left = Math.random()*100+"vw";
+  c.style.opacity = "0.8";
+  c.style.animation = `fall ${3+Math.random()*2}s linear infinite`;
+  document.body.appendChild(c);
+}
+
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(360deg); }
+}`;
+document.head.appendChild(style);
+</script>
 
 </body>
 </html>
