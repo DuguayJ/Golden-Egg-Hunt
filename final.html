@@ -89,6 +89,7 @@
   .inputs-wrap {
     width: 100%; margin-bottom: 22px;
     animation: fadeUp 1.6s 0.25s both;
+   <input class="word-input" id="playerName" placeholder="Your Name" maxlength="40" autocomplete="off" spellcheck="false" style="margin-bottom:10px;">
   }
   .inputs-label {
     font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
@@ -286,21 +287,20 @@
   <div class="victory-egg" id="victoryEgg">🥚</div>
   <h2 class="victory-title">You Found<em>the Golden Egg!</em></h2>
   <p class="victory-sub">The hunt is over. The legend is real.<br><strong>Screenshot this moment to claim your prize.</strong></p>
-  <button class="screenshot-btn" onclick="triggerCelebration()">
-    📸 &nbsp;Tap to Celebrate!
-  </button>
+<button class="screenshot-btn" onclick="handleWin()">
+  📧 &nbsp;Claim Your Prize
+</button>
 </div>
 
 <div id="secret-msg"></div>
 
 <!-- GoatCounter -->
 <script data-goatcounter="https://golden-egg-hunt.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-
 <script>
 /* ─── CONFIG ─── */
 const CORRECT = ["GOLD","QUEST","HIDDEN","KEY","RISE"];
 
-/* ─── PARTICLE ENGINE (same as index) ─── */
+/* ─── PARTICLE ENGINE (unchanged) ─── */
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 let W, H;
@@ -363,8 +363,11 @@ function initParticles() { resize(); sparks = Array.from({length:140}, (_,i) => 
 function loop() {
   ctx.clearRect(0, 0, W, H);
   const bg = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.85);
-  bg.addColorStop(0,'rgba(46,20,0,1)'); bg.addColorStop(0.45,'rgba(20,8,0,1)'); bg.addColorStop(1,'rgba(5,2,0,1)');
-  ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+  bg.addColorStop(0,'rgba(46,20,0,1)');
+  bg.addColorStop(0.45,'rgba(20,8,0,1)');
+  bg.addColorStop(1,'rgba(5,2,0,1)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0,0,W,H);
   orbs.forEach(o => { o.update(); o.draw(); });
   sparks.forEach(s => { s.update(); s.draw(); });
   requestAnimationFrame(loop);
@@ -385,14 +388,12 @@ function checkWords() {
   const matched = CORRECT.every(w => vals.includes(w));
 
   if (matched) {
-    // Flash correct inputs green
     [1,2,3,4,5].forEach(i => {
       const el = document.getElementById('w'+i);
       if (CORRECT.includes(el.value.toUpperCase().trim())) el.classList.add('correct');
     });
     setTimeout(openVictory, 600);
   } else {
-    // Shake the button and inputs
     const btn = document.querySelector('.btn');
     const grid = document.querySelector('.inputs-grid');
     btn.classList.remove('shake'); grid.classList.remove('shake');
@@ -403,7 +404,6 @@ function checkWords() {
   }
 }
 
-// Enter key on any input
 document.querySelectorAll('.word-input').forEach((el, i, arr) => {
   el.addEventListener('keydown', e => {
     if (e.key === 'Enter') {
@@ -427,7 +427,6 @@ function triggerCelebration() {
 
   const egg = document.getElementById('victoryEgg');
 
-  // Crack sequence
   egg.style.transition = 'none';
   egg.animate([
     { transform: 'scale(1) rotate(0deg)' },
@@ -438,51 +437,8 @@ function triggerCelebration() {
 
   setTimeout(() => {
     egg.textContent = '🐣';
-
-    // Golden aura burst
-    for (let i = 0; i < 3; i++) {
-      setTimeout(() => {
-        const ring = document.createElement('div');
-        ring.style.cssText = 'position:fixed;left:50%;top:42%;width:24px;height:24px;border:3px solid #ffe566;border-radius:50%;z-index:201;pointer-events:none;';
-        ring.animate([
-          { transform:'translate(-50%,-50%) scale(1)', opacity:1 },
-          { transform:'translate(-50%,-50%) scale(10)', opacity:0 }
-        ], { duration: 700, easing: 'ease-out' });
-        document.body.appendChild(ring);
-        setTimeout(() => ring.remove(), 720);
-      }, i * 120);
-    }
-
-    // Pixel burst
-    for (let i = 0; i < 50; i++) {
-      const p = document.createElement('div');
-      const angle = Math.random() * Math.PI * 2;
-      const dist = 140 + Math.random() * 120;
-      p.style.cssText = `position:fixed;left:50%;top:42%;width:12px;height:12px;border-radius:50%;background:#ffd700;z-index:202;pointer-events:none;`;
-      p.animate([
-        { transform:'translate(-50%,-50%)', opacity:1 },
-        { transform:`translate(calc(-50% + ${Math.cos(angle)*dist}px),calc(-50% + ${Math.sin(angle)*dist}px))`, opacity:0 }
-      ], { duration: 700, easing: 'ease-out' });
-      document.body.appendChild(p);
-      setTimeout(() => p.remove(), 720);
-    }
-
-    // WIN banner
-    const win = document.createElement('div');
-    win.textContent = '⭐ YOU WIN! ⭐';
-    win.style.cssText = 'position:fixed;left:50%;top:22%;transform:translate(-50%,-50%);font-family:"Playfair Display",serif;font-size:clamp(32px,7vw,60px);font-weight:900;color:#ffe566;text-shadow:0 0 20px rgba(255,200,40,0.8);z-index:210;pointer-events:none;white-space:nowrap;';
-    win.animate([
-      { transform:'translate(-50%,-50%) scale(0.2)', opacity:0 },
-      { transform:'translate(-50%,-50%) scale(1.2)', opacity:1 },
-      { transform:'translate(-50%,-50%) scale(1)', opacity:1 }
-    ], { duration: 600, easing: 'cubic-bezier(0.16,1,0.3,1)' });
-    document.body.appendChild(win);
-    setTimeout(() => win.remove(), 2500);
-
-    // More fireworks
     for (let f = 0; f < 6; f++) setTimeout(createFirework, f * 160);
     launchConfetti(200);
-
   }, 350);
 }
 
@@ -505,10 +461,6 @@ function launchConfetti(n) {
       c.style.left = Math.random() * 100 + 'vw';
       c.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
       c.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
-      c.style.animationDelay = (Math.random() * 0.8) + 's';
-      c.style.width = (7 + Math.random() * 8) + 'px';
-      c.style.height = (7 + Math.random() * 8) + 'px';
-      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
       document.body.appendChild(c);
       setTimeout(() => c.remove(), 5000);
     }, i * 12);
@@ -519,40 +471,49 @@ function launchConfetti(n) {
 function createFirework() {
   const x = rand(W * 0.15, W * 0.85);
   const y = rand(H * 0.05, H * 0.55);
-  const colors = ['#ffe566','#f5c118','#ff4081','#4caf50','#64b5f6','#e040fb','#ff6b35'];
-  const color = colors[Math.floor(Math.random() * colors.length)];
   for (let i = 0; i < 28; i++) {
     const dot = document.createElement('div');
     dot.className = 'firework-dot';
-    const angle = (i / 28) * Math.PI * 2;
-    const dist = 70 + Math.random() * 80;
-    dot.style.cssText = `left:${x}px;top:${y}px;background:${color};`;
-    dot.animate([
-      { transform:'translate(0,0)', opacity:1 },
-      { transform:`translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`, opacity:0 }
-    ], { duration: 700 + Math.random()*300, easing:'ease-out' });
+    dot.style.cssText = `left:${x}px;top:${y}px;background:#ffd700;`;
     document.body.appendChild(dot);
     setTimeout(() => dot.remove(), 1100);
   }
 }
 
-/* ─── SECRET EGG ─── */
-let secretTaps = 0;
-const secretMsg = document.getElementById('secret-msg');
-let secretTimer;
-function secretTap() {
-  secretTaps++;
-  clearTimeout(secretTimer);
-  if (secretTaps >= 5) {
-    secretMsg.textContent = '🥚 Secret Egg Found! You are Amazing!';
-    secretMsg.style.opacity = '1';
-    secretTimer = setTimeout(() => { secretMsg.style.opacity='0'; secretTaps=0; }, 3000);
-  } else if (secretTaps >= 2) {
-    secretMsg.textContent = `${secretTaps}/5 — keep tapping…`;
-    secretMsg.style.opacity = '1';
-    secretTimer = setTimeout(() => { secretMsg.style.opacity='0'; secretTaps=0; }, 1500);
-  }
+/* ─── NEW: WIN HANDLER ─── */
+function generateWinnerID() {
+  return 'EGG-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+}
+
+function handleWin() {
+  triggerCelebration();
+  setTimeout(submitResult, 1200);
+}
+
+function submitResult() {
+  let name = document.getElementById('playerName')?.value.trim();
+  if (!name) name = prompt("Enter your name:");
+  if (!name) return;
+
+  const words = getValues().join(', ');
+  const winnerID = generateWinnerID();
+
+  fetch("https://script.google.com/macros/s/AKfycbzEXu7BiQGJgV7crnXOhDhVw5v79ZsB0jo2FQVRrXAkcZNFjHRAimNtxC2XVgl7MuoQfg/exec", {
+    method: "POST",
+    body: JSON.stringify({ name, words, id: winnerID }),
+    headers: { "Content-Type": "application/json" }
+  });
+
+  const subject = encodeURIComponent("🏆 Golden Egg Hunt Winner");
+  const body = encodeURIComponent(
+`Name: ${name}
+Winner ID: ${winnerID}
+Words: ${words}`
+  );
+
+  window.location.href = `mailto:duguayj@ndh.on.ca?subject=${subject}&body=${body}`;
 }
 </script>
+
 </body>
 </html>
