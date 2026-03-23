@@ -1,147 +1,586 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Golden Easter Egg — Piece 2</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🌿 Key fragment #5</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold:    #F5C842;
+      --amber:   #E8832A;
+      --moss:    #4A7C59;
+      --forest:  #1E3A2F;
+      --sage:    #7FB069;
+      --cream:   #FDF6E3;
+      --rust:    #C0392B;
+      --sky-top: #0D1F1A;
+      --sky-mid: #1A3A2A;
+      --horizon: #3D5A3E;
+    }
 
-<style>
-:root{
-  --pink:#ffd6e7;
-  --mint:#d9fff1;
-  --sky:#d7ecff;
-  --lav:#eadcff;
-  --peach:#ffe6c7;
-}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
+    html, body {
+      width: 100%; min-height: 100vh;
+      overflow-x: hidden;
+      font-family: 'Lato', sans-serif;
+    }
 
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
+    body {
+      background: var(--sky-top);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
 
-  /* Pastel stripe background */
-  background: repeating-linear-gradient(
-    45deg,
-    var(--pink),
-    var(--pink) 120px,
-    var(--mint) 120px,
-    var(--mint) 240px,
-    var(--sky) 240px,
-    var(--sky) 360px,
-    var(--lav) 360px,
-    var(--lav) 480px,
-    var(--peach) 480px,
-    var(--peach) 600px
-  );
-}
+    /* ── Sky gradient layers ── */
+    .sky {
+      position: fixed; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 120% 60% at 50% 120%,
+        #5C3D1A 0%, #2E5C38 30%, #1A3A2A 55%, #0D1F1A 100%);
+    }
 
-/* Floating decorative mini eggs */
-.mini-egg{
-  position:absolute;
-  width:90px;
-  height:110px;
-  border-radius: 50% 50% 48% 48% / 58% 58% 42% 42%;
-  border:5px solid white;
-  box-shadow:0 15px 35px rgba(0,0,0,.2);
-  animation: float 8s ease-in-out infinite;
-}
+    /* ── Moon ── */
+    .moon {
+      position: fixed;
+      top: 6vh; left: 50%;
+      transform: translateX(-50%);
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 38%, #FFF9D6, #F5C842 50%, #C8922A);
+      box-shadow:
+        0 0 40px rgba(245,200,66,.5),
+        0 0 100px rgba(245,200,66,.25),
+        0 0 200px rgba(245,200,66,.1);
+      z-index: 1;
+      animation: moonPulse 4s ease-in-out infinite;
+    }
+    .moon::after {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.18), transparent 60%);
+    }
+    @keyframes moonPulse {
+      0%,100% { box-shadow: 0 0 40px rgba(245,200,66,.5), 0 0 100px rgba(245,200,66,.25); }
+      50%      { box-shadow: 0 0 60px rgba(245,200,66,.8), 0 0 140px rgba(245,200,66,.4); }
+    }
 
-.mini-egg:nth-child(1){
-  top:8%;
-  left:10%;
-  background:linear-gradient(135deg,#fff6b3,#ffd6e7);
-  transform:rotate(-15deg);
-}
+    /* ── Stars ── */
+    .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: starTwinkle var(--dur) ease-in-out infinite alternate;
+    }
+    @keyframes starTwinkle {
+      from { opacity: var(--a1); transform: scale(1); }
+      to   { opacity: var(--a2); transform: scale(1.8); }
+    }
 
-.mini-egg:nth-child(2){
-  bottom:10%;
-  right:12%;
-  background:linear-gradient(135deg,#d7ecff,#eadcff);
-  transform:rotate(18deg);
-  animation-delay:2s;
-}
+    /* ── Trees silhouette ── */
+    .trees {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 45vh;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .trees svg { width: 100%; height: 100%; }
 
-.mini-egg:nth-child(3){
-  bottom:15%;
-  left:15%;
-  background:linear-gradient(135deg,#ffe6c7,#d9fff1);
-  transform:rotate(8deg);
-  animation-delay:4s;
-}
+    /* ── Fireflies ── */
+    .firefly {
+      position: fixed;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #C8FF6A;
+      box-shadow: 0 0 8px 3px rgba(180,255,80,.7);
+      z-index: 3;
+      pointer-events: none;
+      animation: fireflyFloat var(--ffdur) ease-in-out infinite,
+                 fireflyBlink var(--ffblink) ease-in-out infinite;
+    }
+    @keyframes fireflyFloat {
+      0%   { transform: translate(0, 0); }
+      25%  { transform: translate(var(--fx1), var(--fy1)); }
+      50%  { transform: translate(var(--fx2), var(--fy2)); }
+      75%  { transform: translate(var(--fx3), var(--fy3)); }
+      100% { transform: translate(0, 0); }
+    }
+    @keyframes fireflyBlink {
+      0%,100% { opacity: 1; }
+      45%,55% { opacity: 0; }
+    }
 
-@keyframes float{
-  0%,100%{ transform: translateY(0) rotate(var(--rot,0deg)); }
-  50%{ transform: translateY(15px) rotate(var(--rot,0deg)); }
-}
+    /* ── Main card ── */
+    .card {
+      position: relative;
+      z-index: 10;
+      width: min(580px, 92vw);
+      background: rgba(15, 35, 22, 0.72);
+      backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(245,200,66,.25);
+      border-radius: 28px;
+      padding: 52px 48px 48px;
+      text-align: center;
+      box-shadow:
+        0 0 0 1px rgba(245,200,66,.08),
+        0 32px 80px rgba(0,0,0,.6),
+        inset 0 1px 0 rgba(245,200,66,.15);
+      animation: cardRise 1s cubic-bezier(.22,1,.36,1) both;
+      margin: 140px 0 80px;
+    }
+    @keyframes cardRise {
+      from { opacity:0; transform: translateY(48px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
 
-/* Main badge poster */
-.card{
-  background: rgba(255,255,255,.95);
-  padding:50px 40px;
-  border-radius:30px;
-  text-align:center;
-  box-shadow: 0 40px 80px rgba(0,0,0,.25);
-  backdrop-filter: blur(10px);
-  max-width:700px;
-}
+    /* ── Decorative vine corners ── */
+    .card::before, .card::after {
+      content: '❧';
+      position: absolute;
+      font-size: 2rem;
+      color: var(--sage);
+      opacity: .45;
+      line-height: 1;
+    }
+    .card::before { top: 16px; left: 20px; transform: scaleX(-1); }
+    .card::after  { bottom: 16px; right: 20px; }
 
-h1{
-  margin:0 0 15px;
-  font-size: clamp(28px,3vw,36px);
-}
+    /* ── Part badge ── */
+    .part-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(245,200,66,.12);
+      border: 1px solid rgba(245,200,66,.3);
+      border-radius: 999px;
+      padding: 5px 16px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      animation: fadeIn .8s .3s both;
+    }
+    .part-badge span { font-size: .9rem; }
 
-.subtitle{
-  font-size:18px;
-  margin-bottom:20px;
-}
+    @keyframes fadeIn {
+      from { opacity:0; transform: translateY(-8px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
 
-/* Golden word badge */
-.word{
-  display:inline-block;
-  padding:15px 30px;
-  border-radius:50px;
-  font-weight:900;
-  font-size:28px;
-  letter-spacing:3px;
-  background: linear-gradient(90deg,#ffd700,#fff2a8,#ffd700);
-  background-size:200% auto;
-  color:#5a4a00;
-  box-shadow:0 8px 30px rgba(255,215,0,.5);
-  animation: shimmer 3s linear infinite;
-}
+    /* ── Progress keys ── */
+    .keys-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 32px;
+      animation: fadeIn .8s .4s both;
+    }
+    .key-icon {
+      font-size: 1.3rem;
+      filter: grayscale(1) opacity(.3);
+      transition: all .4s;
+    }
+    .key-icon.found {
+      filter: grayscale(0) drop-shadow(0 0 6px var(--gold));
+      animation: keyPop .5s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .key-icon.found:nth-child(1) { animation-delay: .5s; }
+    .key-icon.found:nth-child(2) { animation-delay: .65s; }
+    .key-icon.found:nth-child(3) { animation-delay: .8s; }
+    .key-icon.found:nth-child(4) { animation-delay: .95s; }
+    .key-icon.found:nth-child(5) { animation-delay: 1.1s; }
+    @keyframes keyPop {
+      from { transform: scale(0) rotate(-20deg); opacity:0; }
+      to   { transform: scale(1) rotate(0deg);   opacity:1; }
+    }
 
-@keyframes shimmer{
-  to{ background-position:200% center; }
-}
+    /* ── Headline ── */
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 6.5vw, 3.4rem);
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 12px;
+      animation: fadeIn .8s .5s both;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+      display: block;
+    }
 
-.footer{
-  margin-top:25px;
-  font-size:14px;
-  opacity:.75;
-}
+    .subtitle {
+      font-size: 1rem;
+      color: rgba(253,246,227,.55);
+      line-height: 1.7;
+      margin-bottom: 36px;
+      font-weight: 300;
+      animation: fadeIn .8s .6s both;
+    }
 
-</style>
+    /* ── Stained-glass egg ── */
+    .egg-stage {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 36px;
+      animation: fadeIn .8s .7s both;
+    }
+    .egg-svg-wrap {
+      cursor: pointer;
+      filter: drop-shadow(0 0 20px rgba(245,200,66,.35)) drop-shadow(0 0 50px rgba(74,124,89,.3));
+      animation: eggFloat 3s ease-in-out infinite;
+      transition: filter .2s;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .egg-svg-wrap:hover {
+      filter: drop-shadow(0 0 30px rgba(245,200,66,.6)) drop-shadow(0 0 70px rgba(74,124,89,.5));
+    }
+    @keyframes eggFloat {
+      0%,100% { transform: translateY(0) rotate(-1.5deg); }
+      50%      { transform: translateY(-16px) rotate(1.5deg); }
+    }
+
+    /* ── Word reveal box ── */
+    .word-box {
+      position: relative;
+      background: rgba(245,200,66,.07);
+      border: 1px solid rgba(245,200,66,.25);
+      border-radius: 18px;
+      padding: 30px 36px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      animation: fadeIn .8s 1.1s both;
+    }
+    /* decorative leaf watermarks */
+    .word-box::before {
+      content: '🌿';
+      position: absolute;
+      font-size: 5rem;
+      opacity: .06;
+      top: -10px; right: -10px;
+      pointer-events: none;
+    }
+    .word-box::after {
+      content: '🌿';
+      position: absolute;
+      font-size: 5rem;
+      opacity: .06;
+      bottom: -10px; left: -10px;
+      transform: scaleX(-1) rotate(30deg);
+      pointer-events: none;
+    }
+
+    .word-meta {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: rgba(245,200,66,.5);
+      margin-bottom: 8px;
+    }
+    .word-intro {
+      font-family: 'Lato', sans-serif;
+      font-size: .95rem;
+      color: rgba(253,246,227,.6);
+      margin-bottom: 16px;
+      font-weight: 300;
+    }
+    .secret-word {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(3rem, 10vw, 4.6rem);
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: .04em;
+      line-height: 1;
+      text-shadow:
+        0 0 40px rgba(245,200,66,.5),
+        0 3px 0 rgba(0,0,0,.4);
+      animation: wordBloom 1s cubic-bezier(.34,1.56,.64,1) 1.3s both;
+    }
+    @keyframes wordBloom {
+      from { opacity:0; transform: scale(.6) rotate(-4deg); letter-spacing: -.1em; }
+      to   { opacity:1; transform: scale(1)  rotate(0deg);  letter-spacing: .04em; }
+    }
+
+    /* ── Footer ── */
+    .footer-text {
+      font-size: .8rem;
+      color: rgba(253,246,227,.25);
+      letter-spacing: .08em;
+      animation: fadeIn .8s 1.5s both;
+    }
+    .footer-text a { color: var(--sage); text-decoration: none; }
+
+    /* ── Leaf particles ── */
+    .leaf {
+      position: fixed;
+      font-size: 1.1rem;
+      pointer-events: none;
+      z-index: 999;
+      animation: leafDrift var(--ldur) ease-out forwards;
+    }
+    @keyframes leafDrift {
+      0%   { opacity:1; transform: translate(0,0) rotate(0deg) scale(1); }
+      100% { opacity:0; transform: translate(var(--lx), var(--ly)) rotate(var(--lr)) scale(.3); }
+    }
+
+    /* ── Gold orb burst ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 998;
+      animation: orbBurst var(--odur) ease-out forwards;
+    }
+    @keyframes orbBurst {
+      0%   { opacity:.9; transform: translate(0,0) scale(0); }
+      60%  { opacity:.6; }
+      100% { opacity:0;  transform: translate(var(--ox), var(--oy)) scale(1); }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="mini-egg"></div>
-<div class="mini-egg"></div>
-<div class="mini-egg"></div>
+  <!-- Sky -->
+  <div class="sky"></div>
 
-<div class="card">
-  <h1>You have found piece 2/5 of the golden Easter Egg!</h1>
-  <div class="subtitle">Your special word is:</div>
-  <div class="word">NDH</div>
-  <div class="footer">🐣 3 pieces remain… keep hunting.</div>
-</div>
-<script data-goatcounter="https://golden-egg-hunt.goatcounter.com/count"
-async src="//gc.zgo.at/count.js"></script>
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Moon -->
+  <div class="moon"></div>
+
+  <!-- Fireflies -->
+  <div id="fireflies"></div>
+
+  <!-- Trees SVG silhouette -->
+  <div class="trees">
+    <svg viewBox="0 0 1440 400" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="treeGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1E3A2F"/>
+          <stop offset="100%" stop-color="#0D1A14"/>
+        </linearGradient>
+      </defs>
+      <!-- Far trees (lighter) -->
+      <g fill="#1E3A2F" opacity=".6">
+        <polygon points="100,300 140,180 180,300"/>
+        <polygon points="120,300 160,150 200,300"/>
+        <polygon points="260,300 310,170 360,300"/>
+        <polygon points="380,300 420,190 460,300"/>
+        <polygon points="500,300 545,160 590,300"/>
+        <polygon points="680,300 720,175 760,300"/>
+        <polygon points="820,300 860,165 900,300"/>
+        <polygon points="950,300 1000,155 1050,300"/>
+        <polygon points="1100,300 1145,170 1190,300"/>
+        <polygon points="1280,300 1320,180 1360,300"/>
+      </g>
+      <!-- Near trees (dark) -->
+      <g fill="url(#treeGrad)">
+        <polygon points="-20,400 40,220 100,400"/>
+        <polygon points="30,400 100,180 170,400"/>
+        <polygon points="140,400 210,195 280,400"/>
+        <polygon points="240,400 320,160 400,400"/>
+        <polygon points="360,400 440,185 520,400"/>
+        <polygon points="480,400 570,170 660,400"/>
+        <polygon points="600,400 680,190 760,400"/>
+        <polygon points="700,400 790,155 880,400"/>
+        <polygon points="820,400 910,175 1000,400"/>
+        <polygon points="940,400 1030,165 1120,400"/>
+        <polygon points="1070,400 1155,180 1240,400"/>
+        <polygon points="1200,400 1285,170 1370,400"/>
+        <polygon points="1330,400 1400,195 1470,400"/>
+        <rect x="0" y="340" width="1440" height="60" fill="#0A1610"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <div class="part-badge"><span>🗝️</span> Easter Egg Hunt 2025</div>
+
+    <div class="keys-row" id="keysRow"></div>
+
+    <h1>You Found<em>The Final Key</em></h1>
+    <p class="subtitle">Deep in the forest, the last clue has been uncovered.<br>Here is the word that unlocks the egg:</p>
+
+    <!-- Stained-glass egg SVG -->
+    <div class="egg-stage">
+      <div class="egg-svg-wrap" id="eggWrap">
+        <svg width="130" height="168" viewBox="0 0 130 168" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="eggClip">
+              <ellipse cx="65" cy="90" rx="55" ry="74"/>
+            </clipPath>
+            <radialGradient id="eggShine" cx="35%" cy="30%" r="55%">
+              <stop offset="0%"   stop-color="rgba(255,255,255,.22)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </radialGradient>
+            <filter id="eggGlow">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <!-- Stained-glass panels -->
+          <g clip-path="url(#eggClip)" filter="url(#eggGlow)">
+            <!-- Base fill -->
+            <ellipse cx="65" cy="90" rx="55" ry="74" fill="#1a3322"/>
+            <!-- Coloured panels -->
+            <polygon points="65,16 120,60 100,130 65,90" fill="#E8832A" opacity=".85"/>
+            <polygon points="65,16 10,60 30,130 65,90"   fill="#F5C842" opacity=".85"/>
+            <polygon points="30,130 65,90 100,130 65,164" fill="#4A7C59" opacity=".9"/>
+            <polygon points="65,16 40,50 65,90 90,50"     fill="#C8FF6A" opacity=".55"/>
+            <polygon points="10,60 30,130 65,90 40,50"    fill="#7FB069" opacity=".6"/>
+            <polygon points="120,60 100,130 65,90 90,50"  fill="#F5C842" opacity=".6"/>
+            <!-- Lead lines -->
+            <line x1="65" y1="16" x2="65" y2="90"  stroke="rgba(0,0,0,.5)" stroke-width="2"/>
+            <line x1="65" y1="90" x2="120" y2="60" stroke="rgba(0,0,0,.5)" stroke-width="2"/>
+            <line x1="65" y1="90" x2="10"  y2="60" stroke="rgba(0,0,0,.5)" stroke-width="2"/>
+            <line x1="65" y1="90" x2="100" y2="130" stroke="rgba(0,0,0,.5)" stroke-width="2"/>
+            <line x1="65" y1="90" x2="30"  y2="130" stroke="rgba(0,0,0,.5)" stroke-width="2"/>
+            <line x1="65" y1="90" x2="65"  y2="164" stroke="rgba(0,0,0,.5)" stroke-width="2"/>
+            <!-- shine overlay -->
+            <ellipse cx="65" cy="90" rx="55" ry="74" fill="url(#eggShine)"/>
+          </g>
+          <!-- Outline -->
+          <ellipse cx="65" cy="90" rx="55" ry="74"
+            fill="none" stroke="rgba(245,200,66,.6)" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Word box -->
+    <div class="word-box">
+      <div class="word-meta">Key 5 of 5 · Your Secret Word is</div>
+      <div class="word-intro">Write this down — it's the last piece of the puzzle.</div>
+      <div class="secret-word">Verdant</div>
+    </div>
+
+    <div class="footer-text">🌿 Gather all 5 words to unlock the Easter egg 🌿</div>
+  </div>
+
+  <script>
+    /* ── Stars ── */
+    var sc = document.getElementById('stars');
+    for (var i = 0; i < 160; i++) {
+      var s = document.createElement('div');
+      s.className = 'star';
+      var sz = .8 + Math.random()*2.2;
+      s.style.cssText =
+        'left:' + (Math.random()*100) + '%;' +
+        'top:'  + (Math.random()*75)  + '%;' +
+        'width:'  + sz + 'px;' +
+        'height:' + sz + 'px;' +
+        '--dur:'  + (2 + Math.random()*3) + 's;' +
+        '--a1:'   + (.1 + Math.random()*.3) + ';' +
+        '--a2:'   + (.6 + Math.random()*.4) + ';' +
+        'animation-delay:' + (Math.random()*4) + 's;';
+      sc.appendChild(s);
+    }
+
+    /* ── Fireflies ── */
+    var fc = document.getElementById('fireflies');
+    for (var j = 0; j < 22; j++) {
+      var f = document.createElement('div');
+      f.className = 'firefly';
+      var rx = function(){ return (Math.random()*160-80)+'px'; };
+      var ry = function(){ return (Math.random()*120-60)+'px'; };
+      f.style.cssText =
+        'left:' + (10+Math.random()*80) + '%;' +
+        'top:'  + (30+Math.random()*55) + '%;' +
+        '--ffdur:'   + (5+Math.random()*8) + 's;' +
+        '--ffblink:' + (1+Math.random()*2) + 's;' +
+        '--fx1:' + rx() + ';--fy1:' + ry() + ';' +
+        '--fx2:' + rx() + ';--fy2:' + ry() + ';' +
+        '--fx3:' + rx() + ';--fy3:' + ry() + ';' +
+        'animation-delay:-' + (Math.random()*8) + 's;';
+      fc.appendChild(f);
+    }
+
+    /* ── Keys row ── */
+    var kr = document.getElementById('keysRow');
+    var keyEmojis = ['🗝️','🗝️','🗝️','🗝️','🗝️'];
+    for (var k = 0; k < 5; k++) {
+      var ki = document.createElement('div');
+      ki.className = 'key-icon found';
+      ki.textContent = keyEmojis[k];
+      kr.appendChild(ki);
+    }
+
+    /* ── Burst helpers ── */
+    var goldColors = ['#F5C842','#E8832A','#C8FF6A','#7FB069','#FDF6E3','#4A7C59'];
+    var leafEmoji  = ['🍃','🌿','🍀','🌱','✨','⭐'];
+
+    function eggCentre() {
+      var r = document.getElementById('eggWrap').getBoundingClientRect();
+      return { x: r.left + r.width/2, y: r.top + r.height/2 };
+    }
+
+    function orbBurst(cx, cy, count) {
+      for (var i = 0; i < count; i++) {
+        var o = document.createElement('div');
+        o.className = 'orb';
+        var sz = 6 + Math.random()*18;
+        var angle = Math.random()*Math.PI*2;
+        var dist  = 60 + Math.random()*280;
+        o.style.cssText =
+          'left:' + cx + 'px;top:' + cy + 'px;' +
+          'width:' + sz + 'px;height:' + sz + 'px;' +
+          'background:' + goldColors[Math.floor(Math.random()*goldColors.length)] + ';' +
+          'box-shadow: 0 0 ' + (sz*1.5) + 'px ' + goldColors[0] + ';' +
+          '--ox:' + (Math.cos(angle)*dist) + 'px;' +
+          '--oy:' + (Math.sin(angle)*dist*.6 - 120) + 'px;' +
+          '--odur:' + (1+Math.random()*.8) + 's;' +
+          'animation-delay:' + (Math.random()*.2) + 's;';
+        document.body.appendChild(o);
+        (function(el){ setTimeout(function(){ el.remove(); }, 2200); })(o);
+      }
+    }
+
+    function leafBurst(cx, cy, count) {
+      for (var i = 0; i < count; i++) {
+        var l = document.createElement('div');
+        l.className = 'leaf';
+        var dx = (Math.random()-.5)*300;
+        var dy = -60 - Math.random()*200;
+        l.textContent = leafEmoji[Math.floor(Math.random()*leafEmoji.length)];
+        l.style.cssText =
+          'left:' + cx + 'px;top:' + cy + 'px;' +
+          '--lx:' + dx + 'px;--ly:' + dy + 'px;' +
+          '--lr:' + (Math.random()*720-360) + 'deg;' +
+          '--ldur:' + (1.2+Math.random()*1.2) + 's;' +
+          'animation-delay:' + (i*.04) + 's;';
+        document.body.appendChild(l);
+        (function(el){ setTimeout(function(){ el.remove(); }, 2800); })(l);
+      }
+    }
+
+    /* Auto-burst on load */
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        var c = eggCentre();
+        orbBurst(c.x, c.y, 60);
+        leafBurst(c.x, c.y, 12);
+      }, 700);
+    });
+
+    /* Click egg */
+    document.getElementById('eggWrap').addEventListener('click', function() {
+      var c = eggCentre();
+      orbBurst(c.x, c.y, 40);
+      leafBurst(c.x, c.y, 10);
+    });
+  </script>
 </body>
 </html>
