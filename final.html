@@ -289,13 +289,8 @@
 <script data-goatcounter="https://golden-egg-hunt.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
 <script>
-/* ── OBFUSCATED CONFIG ──
-   Keywords are stored as char-code arrays, decoded at runtime only.
-   No plaintext strings appear in source. Variable names are generic.
-*/
+
 (function() {
-  // Each inner array is char codes for one keyword (uppercase)
-  // Decode: arr.map(c => String.fromCharCode(c)).join('')
   const _a = [
     [71,79,76,68],
     [81,85,69,83,84],
@@ -304,16 +299,13 @@
     [82,73,83,69]
   ];
 
-  // Decode at call-time so the strings never sit in a variable
   function _d(arr) { return arr.map(function(c){return String.fromCharCode(c);}).join(''); }
 
-  // Expose only a validation function — no array of words ever exposed
   window._chk = function(inputArr) {
     var upper = inputArr.map(function(s){return s.toUpperCase().trim();});
     return _a.every(function(enc){ return upper.includes(_d(enc)); });
   };
 
-  // Expose per-word check for green highlights
   window._chkW = function(s) {
     var u = s.toUpperCase().trim();
     return _a.some(function(enc){ return _d(enc) === u; });
