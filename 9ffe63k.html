@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>You Found Something...</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --egg-cream: #FDF6E3;
+    --egg-yolk: #F5A623;
+    --egg-yolk-deep: #C47D0E;
+    --grass: #3A7D44;
+    --grass-light: #52A65A;
+    --sky: #C8E6F5;
+    --bark: #6B4226;
+    --shell-white: #FFFDF7;
+    --ink: #1A1208;
+    --ink-soft: #4A3B28;
+    --danger: #D94F3D;
+    --danger-deep: #A33428;
+    --font-display: 'Abril Fatface', serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--sky);
+    font-family: var(--font-body);
+    color: var(--ink);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+  }
+
+  /* ── Sky + scenery background ── */
+  #scene {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .cloud {
+    position: absolute;
+    background: #fff;
+    border-radius: 50px;
+    opacity: 0.82;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .c1 { width: 120px; height: 38px; top: 8%; left: 5%; animation: drift 28s linear infinite; }
+  .c1::before { width: 60px; height: 60px; top: -30px; left: 18px; }
+  .c1::after  { width: 40px; height: 40px; top: -18px; left: 55px; }
+
+  .c2 { width: 90px; height: 28px; top: 18%; left: 60%; animation: drift 38s linear infinite 6s; }
+  .c2::before { width: 44px; height: 44px; top: -22px; left: 12px; }
+  .c2::after  { width: 30px; height: 30px; top: -14px; left: 42px; }
+
+  .c3 { width: 70px; height: 22px; top: 5%; left: 38%; animation: drift 22s linear infinite 12s; }
+  .c3::before { width: 34px; height: 34px; top: -17px; left: 8px; }
+  .c3::after  { width: 24px; height: 24px; top: -10px; left: 32px; }
+
+  @keyframes drift { from { transform: translateX(0); } to { transform: translateX(110vw); } }
+
+  /* Ground */
+  #ground {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 38%;
+    background: linear-gradient(to bottom, var(--grass-light) 0%, var(--grass) 40%, #2d6035 100%);
+    border-radius: 60% 60% 0 0 / 20px 20px 0 0;
+  }
+  #ground::before {
+    content: '';
+    position: absolute;
+    top: -12px; left: -5%; right: -5%;
+    height: 28px;
+    background: var(--grass-light);
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+
+  /* Flowers */
+  .flower {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .stem { width: 3px; background: #2d6a36; border-radius: 2px; }
+  .petals {
+    width: 18px; height: 18px;
+    position: relative;
+    margin-bottom: -2px;
+  }
+  .petals::before, .petals::after {
+    content: '';
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--egg-yolk);
+    top: 50%; left: 50%;
+    transform-origin: center;
+  }
+  .petals::before { transform: translate(-50%, -100%); box-shadow: 8px 0 0 var(--egg-yolk), 0 8px 0 var(--egg-yolk), -8px 0 0 var(--egg-yolk); }
+  .petals::after  { background: #fff; transform: translate(-50%, -50%); width: 6px; height: 6px; z-index: 1; }
+
+  /* Basket graphic */
+  #basket-area {
+    position: absolute;
+    bottom: 34%;
+    right: 8%;
+    text-align: center;
+    font-size: 52px;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    animation: bobble 3s ease-in-out infinite;
+  }
+  @keyframes bobble { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+  /* ── Main card ── */
+  #card {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 10;
+    padding: 1.2rem 1rem 0.8rem;
+    pointer-events: none;
+  }
+
+  #header {
+    text-align: center;
+    pointer-events: none;
+    margin-bottom: 0.6rem;
+  }
+
+  #header .eyebrow {
+    display: inline-block;
+    background: var(--egg-yolk);
+    color: var(--egg-yolk-deep);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 0.5rem;
+  }
+
+  #header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 7vw, 44px);
+    color: var(--ink);
+    line-height: 1.1;
+    text-shadow: 3px 3px 0 rgba(245,166,35,0.3);
+  }
+
+  #header p {
+    font-size: 15px;
+    color: var(--ink-soft);
+    font-weight: 300;
+    margin-top: 0.3rem;
+    font-style: italic;
+  }
+
+  /* ── Arena ── */
+  #arena-wrap {
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+  }
+
+  #stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+    pointer-events: none;
+  }
+
+  .stat {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .stat span { color: var(--ink); font-weight: 500; }
+
+  #arena {
+    width: 100%;
+    max-width: 480px;
+    flex: 1;
+    min-height: 200px;
+    max-height: 340px;
+    position: relative;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.28);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255,255,255,0.6);
+    box-shadow: 0 8px 32px rgba(58,125,68,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
+    overflow: hidden;
+    pointer-events: auto;
+  }
+
+  /* Subtle grid pattern inside arena */
+  #arena::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px);
+    background-size: 32px 32px;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  #taunt-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: rgba(106, 66, 38, 0.12);
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 0.5s;
+    text-align: center;
+  }
+
+  /* ── The Button ── */
+  #runbtn {
+    position: absolute;
+    padding: 13px 26px;
+    border: none;
+    border-radius: 50px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    white-space: nowrap;
+    pointer-events: auto;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    will-change: left, top, transform;
+    box-shadow: 0 4px 0 var(--egg-yolk-deep), 0 6px 16px rgba(0,0,0,0.18);
+    transition: box-shadow 0.1s, background 0.3s, color 0.3s;
+    background: var(--egg-yolk);
+    color: var(--egg-yolk-deep);
+    z-index: 20;
+  }
+  #runbtn:active {
+    box-shadow: 0 1px 0 var(--egg-yolk-deep), 0 2px 8px rgba(0,0,0,0.15);
+    transform: translateY(3px) !important;
+  }
+
+  /* ── Taunt popup ── */
+  .pop {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--danger);
+    pointer-events: none;
+    z-index: 30;
+    animation: popUp 0.8s ease-out forwards;
+    white-space: nowrap;
+  }
+  @keyframes popUp {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-50px) scale(1.3); }
+  }
+
+  /* Wiggle animation class */
+  @keyframes wiggle {
+    0%,100% { transform: rotate(0deg); }
+    20% { transform: rotate(-12deg) scale(0.92); }
+    50% { transform: rotate(14deg) scale(1.04); }
+    80% { transform: rotate(-8deg) scale(0.96); }
+  }
+  .wiggling { animation: wiggle 0.35s ease-in-out; }
+
+  /* ── Reveal screen ── */
+  #reveal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: var(--egg-cream);
+    animation: revealIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+  @keyframes revealIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+  }
+
+  #reveal .r-emoji { font-size: 72px; margin-bottom: 0.5rem; animation: bounceIn 0.7s 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
+  @keyframes bounceIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  #reveal h2 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 10vw, 56px);
+    color: var(--danger);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    text-shadow: 3px 3px 0 rgba(211,78,61,0.2);
+  }
+
+  #reveal .r-sub {
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+
+  #reveal .r-body {
+    font-size: 15px;
+    color: var(--ink-soft);
+    font-weight: 300;
+    max-width: 320px;
+    line-height: 1.6;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+  }
+
+  #reveal .r-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--grass);
+    color: #fff;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 14px;
+    padding: 10px 24px;
+    border-radius: 50px;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 0 #2d6035, 0 6px 16px rgba(58,125,68,0.3);
+  }
+
+  #reveal .r-misses {
+    margin-top: 1.2rem;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-weight: 300;
+  }
+
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    pointer-events: none;
+    z-index: 100;
+    animation: confettiFall linear forwards;
+    border-radius: 2px;
+  }
+  @keyframes confettiFall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background scene -->
+<div id="scene">
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+  <div id="ground"></div>
+  <!-- Flowers -->
+  <div class="flower" style="left:6%;bottom:33%"><div class="petals"></div><div class="stem" style="height:28px"></div></div>
+  <div class="flower" style="left:14%;bottom:33%"><div class="petals"></div><div class="stem" style="height:20px"></div></div>
+  <div class="flower" style="left:22%;bottom:33%"><div class="petals"></div><div class="stem" style="height:34px"></div></div>
+  <div class="flower" style="left:75%;bottom:33%"><div class="petals"></div><div class="stem" style="height:24px"></div></div>
+  <div class="flower" style="left:84%;bottom:33%"><div class="petals"></div><div class="stem" style="height:18px"></div></div>
+  <div class="flower" style="left:91%;bottom:33%"><div class="petals"></div><div class="stem" style="height:30px"></div></div>
+  <div id="basket-area">🧺</div>
+</div>
+
+<!-- HUD -->
+<div id="card">
+  <div id="header">
+    <div class="eyebrow">🥚 Easter Egg Hunt</div>
+    <h1>You Found<br>an Egg!</h1>
+    <p>Just click the button to claim your prize...</p>
+  </div>
+
+  <div id="arena-wrap">
+    <div id="stats">
+      <div class="stat">Attempts: <span id="miss-count">0</span></div>
+      <div class="stat" id="taunt-stat">Good luck!</div>
+    </div>
+    <div id="arena">
+      <div id="taunt-display">Claim your prize!</div>
+      <button id="runbtn">🥚 Claim Prize!</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reveal -->
+<div id="reveal">
+  <div class="r-emoji">🐔</div>
+  <h2>April Fools!</h2>
+  <p class="r-sub">That button was never yours to catch.</p>
+  <p class="r-body">But don't give up — 5 real QR codes are hidden out there, and they have actual prizes waiting for you!</p>
+  <div class="r-pill">🗺 Keep hunting!</div>
+  <p class="r-misses" id="final-miss-count"></p>
+</div>
+
+<script>
+const btn       = document.getElementById('runbtn');
+const arena     = document.getElementById('arena');
+const missCount = document.getElementById('miss-count');
+const tauntStat = document.getElementById('taunt-stat');
+const tauntDisp = document.getElementById('taunt-display');
+const reveal    = document.getElementById('reveal');
+const finalMsg  = document.getElementById('final-miss-count');
+
+const TAUNTS_STAT = [
+  "So close!", "Nope!", "Haha!", "Try again!", "Almost...",
+  "Butterfingers!", "Keep going!", "Was that it?",
+  "Getting warmer!", "Or maybe not.", "It's slippery!",
+  "Come on now.", "NEVER.", "You can't catch me!"
+];
+
+const TAUNTS_BIG = [
+  "Nope!", "Ha!", "Nuh uh!", "Miss!", "Nice try!",
+  "Later!", "Bye!", "Woosh!", "DODGE!", "Gone!"
+];
+
+const CONFETTI_COLORS = ['#F5A623','#3A7D44','#D94F3D','#C8E6F5','#FDF6E3','#6B4226','#52A65A'];
+
+let misses = 0;
+const MAX_MISSES = 14;
+let bx = 0, by = 0;
+let btnW = 0, btnH = 0;
+let arenaW = 0, arenaH = 0;
+let done = false;
+let fleeThreshold = 75;
+let spinDeg = 0;
+
+function measure() {
+  const r = arena.getBoundingClientRect();
+  arenaW = r.width;
+  arenaH = r.height;
+  btnW = btn.offsetWidth;
+  btnH = btn.offsetHeight;
+}
+
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+function safePos(avoidX, avoidY) {
+  const pad = 14;
+  const maxW = arenaW - btnW - pad;
+  const maxH = arenaH - btnH - pad;
+  let nx, ny, tries = 0, minDist = Math.min(arenaW, arenaH) * 0.32;
+  do {
+    nx = pad + Math.random() * (maxW - pad);
+    ny = pad + Math.random() * (maxH - pad);
+    tries++;
+  } while (tries < 30 && avoidX !== undefined && Math.hypot(nx - avoidX, ny - avoidY) < minDist);
+  return { x: clamp(nx, pad, maxW), y: clamp(ny, pad, maxH) };
+}
+
+function placeBtn(avoidX, avoidY) {
+  measure();
+  const p = safePos(avoidX, avoidY);
+  bx = p.x; by = p.y;
+  btn.style.left = bx + 'px';
+  btn.style.top  = by + 'px';
+}
+
+function applyPersonality() {
+  const t = misses / MAX_MISSES;
+  const scale = Math.max(0.6, 1 - misses * 0.025);
+  spinDeg += misses > 5 ? (Math.random() * 22 - 11) : (Math.random() * 6 - 3);
+  const wobble = misses > 3 ? (Math.random() * 10 - 5) : 0;
+  btn.style.transform = `scale(${scale.toFixed(3)}) rotate(${(spinDeg + wobble).toFixed(1)}deg)`;
+
+  if (misses >= 12) {
+    btn.style.background = '#D94F3D';
+    btn.style.color = '#fff';
+    btn.style.boxShadow = `0 4px 0 #A33428, 0 6px 16px rgba(0,0,0,0.25)`;
+    btn.textContent = '😤 NEVER';
+    fleeThreshold = 130;
+  } else if (misses >= 8) {
+    btn.style.background = '#C47D0E';
+    btn.style.color = '#fff';
+    btn.style.boxShadow = `0 4px 0 #9a620a, 0 6px 16px rgba(0,0,0,0.22)`;
+    btn.textContent = '😏 Catch me!';
+    fleeThreshold = 110;
+  } else if (misses >= 5) {
+    btn.textContent = '😅 Nope!';
+    fleeThreshold = 95;
+  } else if (misses >= 2) {
+    btn.textContent = '🏃 Run!';
+    fleeThreshold = 82;
+  }
+}
+
+function spawnPop(text) {
+  const el = document.createElement('div');
+  el.className = 'pop';
+  el.textContent = text;
+  const cx = bx + btnW / 2;
+  const cy = by + btnH / 2;
+  el.style.left = (cx - 30) + 'px';
+  el.style.top  = (cy - 20) + 'px';
+  arena.appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
+}
+
+function onMiss(tapX, tapY) {
+  if (done) return;
+  misses++;
+  missCount.textContent = misses;
+  tauntStat.textContent = TAUNTS_STAT[Math.min(misses - 1, TAUNTS_STAT.length - 1)];
+  spawnPop(TAUNTS_BIG[Math.floor(Math.random() * TAUNTS_BIG.length)]);
+
+  // Wiggle effect
+  btn.classList.remove('wiggling');
+  void btn.offsetWidth; // reflow
+  btn.classList.add('wiggling');
+  btn.addEventListener('animationend', () => btn.classList.remove('wiggling'), { once: true });
+
+  applyPersonality();
+  tauntDisp.textContent = TAUNTS_BIG[Math.floor(Math.random() * TAUNTS_BIG.length)];
+
+  if (misses >= MAX_MISSES) {
+    endGame(); return;
+  }
+  placeBtn(tapX, tapY);
+}
+
+function endGame() {
+  done = true;
+  btn.style.display = 'none';
+  finalMsg.textContent = `You tried ${misses} time${misses !== 1 ? 's' : ''}. Impressive persistence.`;
+  reveal.style.display = 'flex';
+  spawnConfetti();
+}
+
+function spawnConfetti() {
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+      c.style.width  = (6 + Math.random() * 8) + 'px';
+      c.style.height = (6 + Math.random() * 8) + 'px';
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      const dur = 1.8 + Math.random() * 1.4;
+      c.style.animationDuration = dur + 's';
+      c.style.animationDelay = (Math.random() * 0.4) + 's';
+      document.body.appendChild(c);
+      c.addEventListener('animationend', () => c.remove());
+    }, i * 30);
+  }
+}
+
+// ── Desktop: flee on hover, count each escape as a miss ──
+let fleeCooldown = false;
+arena.addEventListener('mousemove', (e) => {
+  if (done || fleeCooldown) return;
+  const ar = arena.getBoundingClientRect();
+  const mx = e.clientX - ar.left;
+  const my = e.clientY - ar.top;
+  const cx = bx + btnW / 2;
+  const cy = by + btnH / 2;
+  if (Math.hypot(mx - cx, my - cy) < fleeThreshold) {
+    fleeCooldown = true;
+    setTimeout(() => { fleeCooldown = false; }, 600);
+    onMiss(mx, my);
+  }
+});
+
+// ── Click: desktop (fallback — normally unreachable, but ends game if somehow caught) ──
+btn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  endGame();
+});
+
+// ── Touch: mobile ──
+btn.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  const t = e.touches[0];
+  const ar = arena.getBoundingClientRect();
+  onMiss(t.clientX - ar.left, t.clientY - ar.top);
+}, { passive: false });
+
+arena.addEventListener('touchmove', (e) => {
+  if (done) return;
+  e.preventDefault();
+  const t = e.touches[0];
+  const ar = arena.getBoundingClientRect();
+  const mx = t.clientX - ar.left;
+  const my = t.clientY - ar.top;
+  const cx = bx + btnW / 2;
+  const cy = by + btnH / 2;
+  if (Math.hypot(mx - cx, my - cy) < fleeThreshold + 30) {
+    placeBtn(mx, my);
+  }
+}, { passive: false });
+
+arena.addEventListener('touchstart', (e) => {
+  if (e.target !== btn) e.preventDefault();
+}, { passive: false });
+
+// ── Init ──
+window.addEventListener('resize', () => { if (!done) placeBtn(); });
+setTimeout(() => { measure(); placeBtn(); }, 120);
+</script>
+</body>
+</html>
