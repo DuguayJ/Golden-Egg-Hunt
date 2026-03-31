@@ -407,7 +407,7 @@
         SCORE<span id="scoreDisplay">004000</span>
       </div>
       <div class="score-label" style="text-align:center">
-        STAGE<span>5 / 5</span>
+        STAGE<span>4 / 5</span>
       </div>
       <div class="score-label" style="text-align:right">
         LIVES<span class="lives">🐣🐣🐣</span>
@@ -536,7 +536,7 @@
       scoreEl.textContent = String(score).padStart(6,'0');
     }
     setTimeout(function() {
-      var target = 5000, step = 0;
+      var target = 4000, step = 0;
       var iv = setInterval(function() {
         step += 83;
         scoreEl.textContent = String(Math.min(step,target)).padStart(6,'0');
